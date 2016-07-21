@@ -20,7 +20,10 @@
 #include "endor/aonode.h"
 #include "endor/aograph.h"
 #include <stdlib.h>
-
+#include <chrono>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fstream>
 // cout colors and options:
 #define RST  "\x1B[0m"
 #define KBLU  "\x1B[34m"
@@ -31,10 +34,25 @@
 #define FGRN(x) KGRN x RST
 #define BOLD(x) "\x1B[1m" x RST
 using namespace std;
+using namespace std::chrono;
 
 
 
 int main(int argc, char** argv) {
+
+/*	struct timeval tp;
+	gettimeofday(&tp, NULL);
+	unsigned long int ms0 ;
+	ms0 = tp.tv_sec * 1000000 + tp.tv_usec ; // return the value in micro sec. (tv_sec:sec, tv_usec:micro second)*/
+
+	microseconds ms_planning_start,ms_planning_stop, ms_robot_start, ms_robot_stop, ms_human_start, ms_human_stop, ms_assembly_start, ms_assembly_stop;
+
+	ofstream Myfile1;
+	const char* DataLogPath	="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
+	string DataLogPath2		="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
+	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	Myfile1.open ((DataLogPath2+"/1_Assembly_Timing.txt").c_str(),ios::app);
+
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
 
@@ -162,6 +180,7 @@ int main(int argc, char** argv) {
 
 	while (ros::ok()) {
 
+
 //***	Cognition		***//
 
 	//*** Endor
@@ -175,7 +194,20 @@ int main(int argc, char** argv) {
 			myGraph.solveByName(obj_nodeAction.solved_Node);// (obj_nodeAction.solved_Node)
 			//suggesting next node: 0/1
 			if (obj_nodeAction.solved_Node=="screwedPlate_finalPos")
+			{
+				ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop"<<"\n";
+				ms_assembly_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+				Myfile1 <<ms_assembly_stop.count()<<" "<<"AssemblyStop"<<"\n";
+				Myfile1.close();
+
 				exit(1);
+			}
+			else if (obj_nodeAction.solved_Node=="plate_initialPos")
+			{
+				ms_assembly_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+				Myfile1 <<ms_assembly_start.count()<<" "<<"AssemblyStart"<<"\n";
+			}
 
 			obj_nodeAction.suggested_Node=myGraph.suggestNext(1);//
 			cout<<">>>>>>>>>>>>>>>>>>>>>obj_nodeAction.suggested_Node: "<<obj_nodeAction.suggested_Node<<endl;
@@ -317,7 +349,10 @@ int main(int argc, char** argv) {
 
 
 			if (obj_nodeAction.responsible=="H")
-				Gesture_Flag_Resolved=true;
+			{	Gesture_Flag_Resolved=true;
+				ms_human_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+				Myfile1 <<ms_human_stop.count()<<" "<<"HumanStop"<<"\n";
+			}
 			else if (obj_nodeAction.responsible=="R")
 			{
 				obj_nodeAction.robStopFunction();
@@ -346,16 +381,24 @@ int main(int argc, char** argv) {
 
 		if (obj_nodeAction.actionFlag==false && Gesture_Flag_Resolved==true)
 		{
+			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+			Myfile1 <<ms_planning_start.count()<<" "<<"PlanningStart"<<"\n";
+
 			obj_nodeAction.nodeActionListFunction();
 			if (obj_nodeAction.nodeFlag==true)
 			{
 				obj_nodeAction.ActionListFunction();
 				cout<<">> responsible: "<<obj_nodeAction.responsible<<endl;
 				//cout<<">> actionCommand: "<<obj_nodeAction.actionCommand<<endl;
+				ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop"<<"\n";
 
 				if (obj_nodeAction.responsible=="H")
 				{
 					cout<<"****>>>>>>>>>>>>>>> Human: "<<obj_nodeAction.actionCommand[0]<<endl;
+					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
+
 				}
 				else if (obj_nodeAction.responsible=="R")
 				{
@@ -363,6 +406,8 @@ int main(int argc, char** argv) {
 					cout<<"****>>>>>>>>>>>>>>> Robot Right: "<<obj_nodeAction.actionCommand[1]<<endl;
 					//make the control command flag false here;
 					//and assign the command for the controller here
+					ms_robot_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+					Myfile1 <<ms_robot_start.count()<<" "<<"RobotStart"<<"\n";
 
 					for (int i1=0;i1<NO_ARMS;i1++)
 						if (obj_nodeAction.actionCommand[i1]!="0")
@@ -371,6 +416,7 @@ int main(int argc, char** argv) {
 							control_command_flag[i1]=false;
 							cout<<"control_command_flag "<<i1<<": "<<control_command_flag[i1]<<endl;
 							cout<<"POINT 1"<<endl;
+
 						}
 						else if (obj_nodeAction.actionCommand[i1]=="0")
 							obj_callback.rob_goal_reach_flag[i1]=false;
@@ -518,6 +564,9 @@ int main(int argc, char** argv) {
 				obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
 			obj_nodeAction.node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]=1;
 
+			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
+
 			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
 				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
 					cout<<"\t"<<obj_nodeAction.node_action_flag[g1][f1];
@@ -528,6 +577,10 @@ int main(int argc, char** argv) {
 		{
 			for (int i1=0;i1<NO_ARMS;i1++)
 				obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
+
+			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
+
 			Gesture_Flag_Resolved=true;
 		}
 
