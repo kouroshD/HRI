@@ -65,7 +65,7 @@ class endorActionClass {
 		bool actionFlag;
 		bool nodeFlag;
 		string responsible;
-
+		int ambiguity_Number;
 		//class functions:
 
 		endorActionClass(int,int,int,int);						//constructor
@@ -77,9 +77,10 @@ class endorActionClass {
 		~endorActionClass();
 		//string graphName2="screwing_task";
 		//AOgraph mygraph_EA;
+
 	private:
 		int cc;
 		int suggested_node_number, suggested_action_number;
-		int ambiguity_Number;
+
 };
 

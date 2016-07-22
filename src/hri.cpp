@@ -200,7 +200,7 @@ int main(int argc, char** argv) {
 			if (obj_nodeAction.solved_Node=="screwedPlate_finalPos")
 			{
 				ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop"<<"\n";
+				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop0"<<"\n";
 				ms_assembly_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 				Myfile1 <<ms_assembly_stop.count()<<" "<<"AssemblyStop"<<"\n";
 				Myfile1.close();
@@ -226,18 +226,19 @@ int main(int argc, char** argv) {
 		{
 			// ? should ask this part, is it a part of planning really! i don't think so, human is deciding here???
 			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_planning_start.count()<<" "<<"planningStart"<<"\n";
+			Myfile1 <<ms_planning_start.count()<<" "<<"planningStart1"<<"\n";
 
 			obj_nodeAction.humanActionSearch(obj_cognition.cognitionHMP_get(),myGraph);
-			if (obj_cognition.cognitionHMP_get()=="PutDown" && control_error_stop_flag==false)
+			ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+			Myfile1 <<ms_planning_stop.count()<<" "<<"planningStop1"<<"\n";
+
+			if (obj_nodeAction.node_action_flag[1][0]==1 && control_error_stop_flag==false)
 			{
 				msg_ctrl_err.data="StopControlErrorCheck";
 				control_error_flag=false;
 				control_error_stop_flag=true;
 			}
 
-			ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_planning_stop.count()<<" "<<"planningStart"<<"\n";
 
 		/* ambiguity_Number=0;
 			// change command to action name
@@ -367,8 +368,11 @@ int main(int argc, char** argv) {
 
 			if (obj_nodeAction.responsible=="H")
 			{	Gesture_Flag_Resolved=true;
-				ms_human_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-				Myfile1 <<ms_human_stop.count()<<" "<<"HumanStop"<<"\n";
+				if(obj_nodeAction.ambiguity_Number>0)
+				{
+					ms_human_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+					Myfile1 <<ms_human_stop.count()<<" "<<"HumanStop"<<"\n";
+				}
 			}
 			else if (obj_nodeAction.responsible=="R")
 			{
@@ -388,7 +392,7 @@ int main(int argc, char** argv) {
 					// it is not necessary here, because we said robot is started before, as the robot is responsible.
 
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
+					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart1"<<"\n";
 
 			}
 			Human_Gesture_Flag=true;
@@ -404,7 +408,7 @@ int main(int argc, char** argv) {
 		if (obj_nodeAction.actionFlag==false && Gesture_Flag_Resolved==true)
 		{
 			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_planning_start.count()<<" "<<"PlanningStart"<<"\n";
+			Myfile1 <<ms_planning_start.count()<<" "<<"PlanningStart2"<<"\n";
 
 			obj_nodeAction.nodeActionListFunction();
 			if (obj_nodeAction.nodeFlag==true)
@@ -413,13 +417,13 @@ int main(int argc, char** argv) {
 				cout<<">> responsible: "<<obj_nodeAction.responsible<<endl;
 				//cout<<">> actionCommand: "<<obj_nodeAction.actionCommand<<endl;
 				ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop"<<"\n";
+				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop2"<<"\n";
 
 				if (obj_nodeAction.responsible=="H")
 				{
 					cout<<"****>>>>>>>>>>>>>>> Human: "<<obj_nodeAction.actionCommand[0]<<endl;
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
+					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart2"<<"\n";
 					if (obj_nodeAction.actionCommand[0]=="PickUp")
 					{
 						msg_ctrl_err.data="StartControlErrorCheck";
@@ -593,7 +597,7 @@ int main(int argc, char** argv) {
 			obj_nodeAction.node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]=1;
 
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
+			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop1"<<"\n";
 
 			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
 				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
@@ -607,7 +611,7 @@ int main(int argc, char** argv) {
 				obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
 
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
+			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop2"<<"\n";
 
 			Gesture_Flag_Resolved=true;
 		}
