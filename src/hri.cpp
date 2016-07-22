@@ -59,6 +59,8 @@ int main(int argc, char** argv) {
 	ros::Publisher pub_HMP_cmnd	=nh.advertise<std_msgs::String>("HMPCommand",1);// SA_arrow No:5
 	//ros::Publisher pub_HMP_cmnd	=nh.advertise<std_msgs::String>("HMPAck",1);// SA_arrow No:5
 	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_control_command",1);//SA_arrow No:8
+	ros::Publisher pub_ctrl_error=nh.advertise<std_msgs::String>("hri_control_error_check",1);//SA_arrow No:8
+
 	//ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_control_ack",1);//SA_arrow No:8
 	//CallBackClass obj_callback;// callback class of subscribers
 	//cognitionClass obj_cognition;
@@ -71,6 +73,8 @@ int main(int argc, char** argv) {
 
 	endorActionClass obj_nodeAction(NO_NODE_ACTION_WIDTH,NO_NODES,NO_ARMS,Number_of_Actions);
 
+	std_msgs::String msg_ctrl_err;
+	bool control_error_flag=true, control_error_stop_flag=true;
 
 	std_msgs::String msg_ctrl_cmnd[NO_ARMS] ;
 	bool control_command_flag[NO_ARMS];
@@ -220,7 +224,20 @@ int main(int argc, char** argv) {
 
 		if (Human_Gesture_Flag==false)
 		{
+			// ? should ask this part, is it a part of planning really! i don't think so, human is deciding here???
+			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+			Myfile1 <<ms_planning_start.count()<<" "<<"planningStart"<<"\n";
+
 			obj_nodeAction.humanActionSearch(obj_cognition.cognitionHMP_get(),myGraph);
+			if (obj_cognition.cognitionHMP_get()=="PutDown" && control_error_stop_flag==false)
+			{
+				msg_ctrl_err.data="StopControlErrorCheck";
+				control_error_flag=false;
+				control_error_stop_flag=true;
+			}
+
+			ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+			Myfile1 <<ms_planning_stop.count()<<" "<<"planningStart"<<"\n";
 
 		/* ambiguity_Number=0;
 			// change command to action name
@@ -368,7 +385,12 @@ int main(int argc, char** argv) {
 					///obj_nodeAction.actionFlag=true;
 					cout<<"POINT 10"<<endl;
 					Gesture_Flag_Resolved=false;
-				}
+					// it is not necessary here, because we said robot is started before, as the robot is responsible.
+
+					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
+
+			}
 			Human_Gesture_Flag=true;
 			cout<<"node_action_flag:"<<endl;
 			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
@@ -398,6 +420,12 @@ int main(int argc, char** argv) {
 					cout<<"****>>>>>>>>>>>>>>> Human: "<<obj_nodeAction.actionCommand[0]<<endl;
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
+					if (obj_nodeAction.actionCommand[0]=="PickUp")
+					{
+						msg_ctrl_err.data="StartControlErrorCheck";
+						control_error_flag=false;
+						control_error_stop_flag=false;
+					}
 
 				}
 				else if (obj_nodeAction.responsible=="R")
@@ -598,6 +626,8 @@ int main(int argc, char** argv) {
 		if (count<= 1&& obj_callback.control_initial_command_flag==true)
 		{
 			control_command_flag[0]=false;
+			control_error_flag=false;
+
 			cout<<"control_command_flag[0]: "<<control_command_flag[0]<<endl;
 ///	16 june		obj_callback.control_ack_flag=false;//??? change control->HMP, see what is happening??
 			///control_count=count;
@@ -606,6 +636,7 @@ int main(int argc, char** argv) {
 				 ss_ctrl_cmnd<<paramCtrl[ii-1];
 			 }
 			msg_ctrl_cmnd[0].data=ss_ctrl_cmnd.str();
+			msg_ctrl_err.data=ss_ctrl_cmnd.str();
 		}
 
 	// Flag check
@@ -632,9 +663,6 @@ int main(int argc, char** argv) {
 								msg_ctrl_cmnd.data=obj_nodeAction.actionCommand[1];
 								obj_callback.hri_control_goal_flag[1]=true;// not sure check later
 							}*/
-
-
-
 		}
 
 
@@ -656,6 +684,17 @@ int main(int argc, char** argv) {
 					control_goal_count[i1]=count;
 
 				}
+
+			if ( control_error_flag==false )
+			{
+
+				ROS_INFO("I publish Control error: %s",msg_ctrl_err.data.c_str());
+				pub_ctrl_error.publish(msg_ctrl_err);
+				control_error_flag=true;
+
+			}
+
+
 
 
 		if (count==0){	usleep(0.5e6); }
