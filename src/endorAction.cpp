@@ -149,7 +149,7 @@ void endorActionClass::nodeListFunction(void){
 void endorActionClass::nodeActionListFunction(void){
 
 
-	cout<<"**************** node_action_list[node_number][0]: "<<node_action_list[node_number][0]<<endl;
+	//cout<<"**************** node_action_list[node_number][0]: "<<node_action_list[node_number][0]<<endl;
 	// when the last action of a node is done:
 	if (actionNumber==nodeActionList_width-1)
 	{

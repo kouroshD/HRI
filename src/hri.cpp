@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 	const char* DataLogPath	="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
 	string DataLogPath2		="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/1_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/4_Assembly_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
@@ -200,7 +200,7 @@ int main(int argc, char** argv) {
 			if (obj_nodeAction.solved_Node=="screwedPlate_finalPos")
 			{
 				ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop0"<<"\n";
+				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop"<<"\n";
 				ms_assembly_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 				Myfile1 <<ms_assembly_stop.count()<<" "<<"AssemblyStop"<<"\n";
 				Myfile1.close();
@@ -226,11 +226,11 @@ int main(int argc, char** argv) {
 		{
 			// ? should ask this part, is it a part of planning really! i don't think so, human is deciding here???
 			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_planning_start.count()<<" "<<"planningStart1"<<"\n";
+			Myfile1 <<ms_planning_start.count()<<" "<<"planningStart"<<"\n";
 
 			obj_nodeAction.humanActionSearch(obj_cognition.cognitionHMP_get(),myGraph);
 			ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_planning_stop.count()<<" "<<"planningStop1"<<"\n";
+			Myfile1 <<ms_planning_stop.count()<<" "<<"planningStop"<<"\n";
 
 			if (obj_nodeAction.node_action_flag[1][0]==1 && control_error_stop_flag==false)
 			{
@@ -238,133 +238,6 @@ int main(int argc, char** argv) {
 				control_error_flag=false;
 				control_error_stop_flag=true;
 			}
-
-
-		/* ambiguity_Number=0;
-			// change command to action name
-				//the same here!
-
-			// check feasible nodes, --> vector of node names,
-			// last node-action cannot happen because all actions related to Robot.
-			//?? i think the number of for should be related to no of hyper arcs, because we check for the actions which are between the nodes
-			for (int zz=0;zz<9;zz++)
-			{
-				// 1- check for all the feasible and not-solved nodes:
-				if (myGraph.NodeFeasibiltyInfo(zz)==1 && myGraph.NodeSolveInfo(zz)==0)
-				{
-					cout<<"z: "<<zz<<endl;
-					if (obj_nodeAction.node_action_list[zz][1]=="S")
-					{
-						cc=0;
-						do
-						{
-
-							if (obj_nodeAction.node_action_list[zz][cc+2]==obj_cognition.cognitionHMP_get() && obj_nodeAction.node_action_flag[zz][cc]==0)
-							{
-								ambiguity_Number++;
-								suggested_node_number=zz;
-								suggested_action_number=cc+2;
-								obj_nodeAction.node_action_flag[zz][cc]=-1;
-								cout<<"***** "<<myGraph.NodeNameInfo(zz)<<" *****"<<endl;
-								cout<<"obj_nodeAction.node_action_list[zz][cc+2]"<<obj_nodeAction.node_action_list[zz][cc+2]<<endl;
-								cout<<"obj_cognition.cognitionHMP_get()"<<obj_cognition.cognitionHMP_get()<<endl;
-								cout<<"obj_nodeAction.node_action_flag[zz][cc]"<<obj_nodeAction.node_action_flag[zz][cc]<<endl;
-								cout<<"ambiguity_Number"<<ambiguity_Number<<endl;
-								break;
-							}
-
-							cout<<"*** "<<myGraph.NodeNameInfo(zz)<<" ***"<<endl;
-							cout<<"obj_nodeAction.node_action_list[zz][cc+2]"<<obj_nodeAction.node_action_list[zz][cc+2]<<endl;
-							cout<<"obj_cognition.cognitionHMP_get()"<<obj_cognition.cognitionHMP_get()<<endl;
-							cout<<"obj_nodeAction.node_action_flag[zz][cc]"<<obj_nodeAction.node_action_flag[zz][cc]<<endl;
-							cout<<"ambiguity_Number"<<ambiguity_Number<<endl;
-							cc++;
-						}
-						while( obj_nodeAction.node_action_list[zz][cc+2]!="0" &&( obj_nodeAction.node_action_flag[zz][cc-1]==1 || obj_nodeAction.node_action_flag[zz][cc-1]==-1) && cc <((obj_nodeAction.nodeActionList_width)-2));
-						// next action not be "0", and this action flag be 1 to go forward.
-						 // || obj_nodeAction.node_action_flag[zz][cc-1]==-1
-					}
-
-					else if (obj_nodeAction.node_action_list[zz][1]=="F")
-					{
-						cout<<myGraph.NodeNameInfo(zz)<<"\t";
-						cc=0;
-						do
-						{	if (obj_nodeAction.node_action_list[zz][cc+2]==obj_cognition.cognitionHMP_get())
-							{	ambiguity_Number++;
-								break;
-							}
-							cc++;
-						}
-						while( obj_nodeAction.node_action_list[zz][cc+2]!="0" && cc <((obj_nodeAction.nodeActionList_width)-2));
-					}
-				}
-			}
-	/*		if (ambiguity_Number==1)
-			{
-				//&& obj_cognition.cognitionHMP_get()==obj_nodeAction.actionCommand[0]
-				if (obj_nodeAction.node_number==suggested_node_number )
-				{
-
-					cout<<"ambiguity_Number: "<<ambiguity_Number<<endl;
-					cout<<FBLU("Human Is Following the Path")<<endl;
-					//** these should be the same!
-					//obj_nodeAction.node_number=suggested_node_number;
-					//obj_nodeAction.actionNumber=suggested_action_number;
-					///Human_Gesture_Flag=true;
-					obj_nodeAction.node_action_flag[suggested_node_number][suggested_action_number-2]=1;
-					obj_nodeAction.actionFlag=false;
-				}
-				else if (obj_nodeAction.node_number!=suggested_node_number)
-				{
-					// make zero all the actions flag done on node_number now before changing the value of it.
-					for (int f1=0;f1<((obj_nodeAction.nodeActionList_width)-2);f1++)
-						obj_nodeAction.node_action_flag[obj_nodeAction.node_number][f1]=0;
-
-					cout<<"ambiguity_Number: "<<ambiguity_Number<<endl;
-					cout<<FRED("Human Is Not Following Optimal Path")<<endl;
-					///Human_Gesture_Flag=true;
-					obj_nodeAction.node_number=suggested_node_number;
-					obj_nodeAction.actionNumber=suggested_action_number;
-					obj_nodeAction.node_action_flag[suggested_node_number][suggested_action_number-2]=1;
-
-					obj_nodeAction.actionFlag=false;
-				}
-					// send stop robot command.
-
-				 // make the all the "-1" elements of the "node_action_flag" matrix to zero, just the ones in the "node_number" line equal to one
-
-				for (int f1=0;f1<((obj_nodeAction.nodeActionList_width)-2);f1++)
-					for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)// No of hyper arcs again, not the nodes?
-						if (obj_nodeAction.node_action_flag[g1][f1]==-1 && g1!=obj_nodeAction.node_number)
-							obj_nodeAction.node_action_flag[g1][f1]=0;
-						else if (obj_nodeAction.node_action_flag[g1][f1]==-1 && g1==obj_nodeAction.node_number)
-							obj_nodeAction.node_action_flag[g1][f1]=1;
-
-			}
-			else if (ambiguity_Number==0 && obj_cognition.cognitionHMP_get()!="ScrewingInitial")
-			{
-				// it means we moved at first (first putDown)
-				cout<<FRED("Human Is Moved, No Path, Continue Your Actions Human")<<endl;
-				///Human_Gesture_Flag=true;
-				///obj_nodeAction.actionFlag=false;???
-
-			}
-
-			else if (ambiguity_Number>1)
-			{
-				cout<<"ambiguity_Number: "<<ambiguity_Number<<endl;
-				cout<<FRED("******************* Ambiguity in Endor  ***********************")<<endl;
-				cout<<FRED("*** Human Continue your Actions Until Ambiguity is Solved!  ***")<<endl;
-				if (obj_nodeAction.responsible=="H")
-				obj_nodeAction.actionFlag=false;
-				/// if here, yeki  az masira behine buud, action badi elam kone,
-				/// age hich kodum tu masire behine nabuud, kari nakone
-			}
-
-
-			*/
-
 
 			if (obj_nodeAction.responsible=="H")
 			{	Gesture_Flag_Resolved=true;
@@ -392,7 +265,7 @@ int main(int argc, char** argv) {
 					// it is not necessary here, because we said robot is started before, as the robot is responsible.
 
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart1"<<"\n";
+					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
 
 			}
 			Human_Gesture_Flag=true;
@@ -408,7 +281,7 @@ int main(int argc, char** argv) {
 		if (obj_nodeAction.actionFlag==false && Gesture_Flag_Resolved==true)
 		{
 			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_planning_start.count()<<" "<<"PlanningStart2"<<"\n";
+			Myfile1 <<ms_planning_start.count()<<" "<<"PlanningStart"<<"\n";
 
 			obj_nodeAction.nodeActionListFunction();
 			if (obj_nodeAction.nodeFlag==true)
@@ -417,13 +290,13 @@ int main(int argc, char** argv) {
 				cout<<">> responsible: "<<obj_nodeAction.responsible<<endl;
 				//cout<<">> actionCommand: "<<obj_nodeAction.actionCommand<<endl;
 				ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop2"<<"\n";
+				Myfile1 <<ms_planning_stop.count()<<" "<<"PlanningStop"<<"\n";
 
 				if (obj_nodeAction.responsible=="H")
 				{
 					cout<<"****>>>>>>>>>>>>>>> Human: "<<obj_nodeAction.actionCommand[0]<<endl;
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart2"<<"\n";
+					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
 					if (obj_nodeAction.actionCommand[0]=="PickUp")
 					{
 						msg_ctrl_err.data="StartControlErrorCheck";
@@ -597,7 +470,7 @@ int main(int argc, char** argv) {
 			obj_nodeAction.node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]=1;
 
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop1"<<"\n";
+			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
 
 			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
 				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
@@ -611,7 +484,7 @@ int main(int argc, char** argv) {
 				obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
 
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop2"<<"\n";
+			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
 
 			Gesture_Flag_Resolved=true;
 		}
