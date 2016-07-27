@@ -49,9 +49,9 @@ void CallBackClass::HMPAckCallBack(const std_msgs::String::ConstPtr& msg) {
 	ROS_INFO("I heard HMP Ack: [%s]", msg->data.c_str());
 
 	if(HMP_initial_command_flag==false) {
-		cout<< "---------->>>>HMP Initial Flag is: "<<HMP_initial_command_flag<<endl;
+//		cout<< "---------->>>>HMP Initial Flag is: "<<HMP_initial_command_flag<<endl;
 		HMP_initial_command_flag=true;
-		cout<< "---------->>>>I changed HMP Initial Flag to: "<<HMP_initial_command_flag<<endl;
+//		cout<< "---------->>>>I changed HMP Initial Flag to: "<<HMP_initial_command_flag<<endl;
 	}
 	else {
 
@@ -62,15 +62,15 @@ void CallBackClass::HMPAckCallBack(const std_msgs::String::ConstPtr& msg) {
 				istream_iterator <string>(ss),
 				istream_iterator <string> (),
 				parameterHMP);
-		cout<<"I heard this msg:\t";
-		for (int jj=0; jj<NoParameterHMP;jj++)
-			cout<<"parameterHMP["<<jj<<"]: "<<parameterHMP[jj]<<" \t";
-		cout<<endl;
+//		cout<<"I heard this msg:\t";
+//		for (int jj=0; jj<NoParameterHMP;jj++)
+//			cout<<"parameterHMP["<<jj<<"]: "<<parameterHMP[jj]<<" \t";
+//		cout<<endl;
 		// if successful having data change to true, otherwise still be false.
-		cout<< "---------->>>>HMP Ack Flag is: "<<HMP_ack_flag<<endl;
+//		cout<< "---------->>>>HMP Ack Flag is: "<<HMP_ack_flag<<endl;
 		HMP_ack_flag=true;
 		HMP_parameter_cognition_flag=false;// related to HMP-cognition flag;
-		cout<< "---------->>>>I changed the HMP Ack Flag to: "<<HMP_ack_flag<<endl;
+//		cout<< "---------->>>>I changed the HMP Ack Flag to: "<<HMP_ack_flag<<endl;
 
 	}
 }
@@ -103,23 +103,23 @@ void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
 	hri_control_ack_msg=msg->data.c_str();
 
 	if(control_initial_command_flag==false) {
-		cout<< "---------->>>>Control Initial Flag is: "<<control_initial_command_flag<<endl;
-		cout<< "---------->>>>Control Initial msg: "<<hri_control_ack_msg<<endl;
+//		cout<< "---------->>>>Control Initial Flag is: "<<control_initial_command_flag<<endl;
+//		cout<< "---------->>>>Control Initial msg: "<<hri_control_ack_msg<<endl;
 		control_initial_command_flag=true;
-		cout<< "---------->>>>I changed Control Initial Flag to: "<<control_initial_command_flag<<endl;
+//		cout<< "---------->>>>I changed Control Initial Flag to: "<<control_initial_command_flag<<endl;
 
 	}
 	else {
-		cout<< "---------->>>>Control Ack Flag 0 is: "<<control_ack_flag[0]<<endl;
-		cout<< "---------->>>>Control Ack Flag 1 is: "<<control_ack_flag[1]<<endl;
+//		cout<< "---------->>>>Control Ack Flag 0 is: "<<control_ack_flag[0]<<endl;
+//		cout<< "---------->>>>Control Ack Flag 1 is: "<<control_ack_flag[1]<<endl;
 		//hri_control_goal_flag=false;
 
 		if (hri_control_ack_msg=="hri_control_command_recieved_left"){// maybe can be commented!
 			hri_control_goal_flag[0]=false;
 			control_ack_flag[0]=true;
-			cout<<"control_ack_flag[0]: "<<control_ack_flag[0]<<endl;
-			cout<<"hri_control_goal_flag[0]: "<<hri_control_goal_flag[0]<<endl;
-			cout<<"hri_control_goal_flag[1]: "<<hri_control_goal_flag[1]<<endl;
+//			cout<<"control_ack_flag[0]: "<<control_ack_flag[0]<<endl;
+//			cout<<"hri_control_goal_flag[0]: "<<hri_control_goal_flag[0]<<endl;
+//			cout<<"hri_control_goal_flag[1]: "<<hri_control_goal_flag[1]<<endl;
 
 		}
 		else if (hri_control_ack_msg=="hri_control_command_recieved_right"){// maybe can be commented!
@@ -140,16 +140,11 @@ void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
 		else if (hri_control_ack_msg=="hri_control_command_Initialization"){// maybe can be commented!
 			control_ack_flag[0]=true;
 		}
-
-
-
 	}
 }
 
 void CallBackClass::ControlOutputCallBack(const std_msgs::String::ConstPtr& msg) {
-	ROS_INFO("I heard Control Output: [%s]", msg->data.c_str());
-
-
+//	ROS_INFO("I heard Control Output: [%s]", msg->data.c_str());
 }
 
 //	BAXTER

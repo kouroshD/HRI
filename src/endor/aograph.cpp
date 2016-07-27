@@ -603,7 +603,7 @@ string AOgraph::loadFromFile(string fileName)
     // set up the graph (nodes feasibility, paths costs)
     string intit_suggestion;
     intit_suggestion=setupGraph();
-    cout<<"*******************************************"<<endl;
+    cout<<"****************"<<endl;
 
     return intit_suggestion;
 }

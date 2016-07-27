@@ -24,6 +24,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
+#include <sys/ioctl.h>
+//#include <linux/kd.h >
+
 // cout colors and options:
 #define RST  "\x1B[0m"
 #define KBLU  "\x1B[34m"
@@ -39,6 +42,7 @@ using namespace std::chrono;
 
 
 int main(int argc, char** argv) {
+	fprintf(stdout, "\aBeep!\n" );
 
 /*	struct timeval tp;
 	gettimeofday(&tp, NULL);
@@ -51,7 +55,7 @@ int main(int argc, char** argv) {
 	const char* DataLogPath	="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
 	string DataLogPath2		="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/4_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/5_Assembly_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
@@ -181,6 +185,11 @@ int main(int argc, char** argv) {
 
 	obj_nodeAction.solved_Node=myGraph.loadFromFile(description); // initialization of the first to do;
 	obj_nodeAction.nodeFlag=false;
+	char d=(char)(7);
+	printf("%c\n",d);
+
+	std::cout << '\7';
+	std::cout << '\a';
 
 	while (ros::ok()) {
 
@@ -193,7 +202,7 @@ int main(int argc, char** argv) {
 		{
 
 			//set the node as solved:
-			cout<<">>>>>>>>>>>>>>>>>>>>>obj_nodeAction.solved_Node: "<<obj_nodeAction.solved_Node<<endl;
+			cout<<">>>>> solved_Node: "<<obj_nodeAction.solved_Node<<endl;
 
 			myGraph.solveByName(obj_nodeAction.solved_Node);// (obj_nodeAction.solved_Node)
 			//suggesting next node: 0/1
@@ -214,7 +223,7 @@ int main(int argc, char** argv) {
 			}
 
 			obj_nodeAction.suggested_Node=myGraph.suggestNext(1);//
-			cout<<">>>>>>>>>>>>>>>>>>>>>obj_nodeAction.suggested_Node: "<<obj_nodeAction.suggested_Node<<endl;
+			///cout<<">>>>>obj_nodeAction.suggested_Node: "<<obj_nodeAction.suggested_Node<<endl;
 			obj_nodeAction.nodeListFunction();
 
 
@@ -257,8 +266,8 @@ int main(int argc, char** argv) {
 					obj_callback.hri_control_goal_flag[i1]=true;/// ??? check to be sure
 					control_command_flag[i1]=false;
 				}
-					cout<<"control_command_flag[0]: "<<control_command_flag[0]<<endl;
-					cout<<"control_command_flag[1]: "<<control_command_flag[1]<<endl;
+					///cout<<"control_command_flag[0]: "<<control_command_flag[0]<<endl;
+					///cout<<"control_command_flag[1]: "<<control_command_flag[1]<<endl;
 					///obj_nodeAction.actionFlag=true;
 					cout<<"POINT 10"<<endl;
 					Gesture_Flag_Resolved=false;
@@ -294,7 +303,7 @@ int main(int argc, char** argv) {
 
 				if (obj_nodeAction.responsible=="H")
 				{
-					cout<<"****>>>>>>>>>>>>>>> Human: "<<obj_nodeAction.actionCommand[0]<<endl;
+					cout<<FBLU(">>>>>> Human: ")<<obj_nodeAction.actionCommand[0]<<endl;
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
 					if (obj_nodeAction.actionCommand[0]=="PickUp")
@@ -307,34 +316,20 @@ int main(int argc, char** argv) {
 				}
 				else if (obj_nodeAction.responsible=="R")
 				{
-					cout<<"****>>>>>>>>>>>>>>> Robot Left: "<<obj_nodeAction.actionCommand[0]<<endl;
-					cout<<"****>>>>>>>>>>>>>>> Robot Right: "<<obj_nodeAction.actionCommand[1]<<endl;
 					//make the control command flag false here;
 					//and assign the command for the controller here
 					ms_robot_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 					Myfile1 <<ms_robot_start.count()<<" "<<"RobotStart"<<"\n";
-
+					cout<<">>>>> Robot: "<<obj_nodeAction.suggested_action<<endl;
 					for (int i1=0;i1<NO_ARMS;i1++)
 						if (obj_nodeAction.actionCommand[i1]!="0")
 						{
 							msg_ctrl_cmnd[i1].data=obj_nodeAction.actionCommand[i1];
 							control_command_flag[i1]=false;
-							cout<<"control_command_flag "<<i1<<": "<<control_command_flag[i1]<<endl;
-							cout<<"POINT 1"<<endl;
 
 						}
 						else if (obj_nodeAction.actionCommand[i1]=="0")
 							obj_callback.rob_goal_reach_flag[i1]=false;
-
-					/*if (obj_nodeAction.actionCommand[0]=="0" && obj_nodeAction.actionCommand[1]!="0")
-					{
-						msg_ctrl_cmnd.data=obj_nodeAction.actionCommand[1];
-						control_command_flag=false;
-						cout<<"control_command_flag2: "<<control_command_flag<<endl;
-						obj_callback.rob_goal_reach_flag[0]=false;
-						cout<<"POINT 2"<<endl;
-					}*/
-
 				}
 			}
 		}
@@ -365,9 +360,7 @@ int main(int argc, char** argv) {
 	///	if (obj_cognition.reasoningHMP_flag==false && obj_nodeAction.actionFlag==true)// maybe: check responsible: "H"
 			if (obj_cognition.reasoningHMP_flag==false )// maybe: check responsible: "H"
 		{
-			cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
-			cout<<" Recognized Action:\t"<<obj_cognition.cognitionHMP_get()<<endl;
-			cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
+			cout<<">>>>> Recognized Action:\t"<<obj_cognition.cognitionHMP_get()<<endl;
 			// if the action recognized by hmp reasoning == action suggested
 				//previously by andorAction, it means it is solved and another action should be suggested
 			// we should delete next if condition:
@@ -472,6 +465,7 @@ int main(int argc, char** argv) {
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
 
+			cout<<"node_action_flag:"<<endl;
 			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
 				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
 					cout<<"\t"<<obj_nodeAction.node_action_flag[g1][f1];
@@ -559,21 +553,14 @@ int main(int argc, char** argv) {
 					obj_callback.control_ack_flag[i1]=false;
 					control_count[i1]=count;
 					control_goal_count[i1]=count;
-
 				}
 
 			if ( control_error_flag==false )
 			{
-
-				ROS_INFO("I publish Control error: %s",msg_ctrl_err.data.c_str());
+				//ROS_INFO("I publish Control error: %s",msg_ctrl_err.data.c_str());
 				pub_ctrl_error.publish(msg_ctrl_err);
 				control_error_flag=true;
-
 			}
-
-
-
-
 		if (count==0){	usleep(0.5e6); }
 		loop_rate.sleep();
 		ros::spinOnce();

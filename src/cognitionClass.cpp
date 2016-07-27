@@ -207,7 +207,7 @@ void cognitionClass::cognitionHMP() {
 						(HMP_max_element==prev_max_element && HMP_posib_max[j]>percentage_check_min*prev_max_value) )  )
 		{
 
-			cout<<endl<<"**************************************************************************"<<endl;
+/*			cout<<endl<<"**************************************************************************"<<endl;
 			if (HMP_max_element==0)
 				cout<<"\"Pick Up\" is Done!"<<endl;
 			else if (HMP_max_element==1)
@@ -237,7 +237,7 @@ void cognitionClass::cognitionHMP() {
 			cout<<"min_flag"<<min_flag<<endl;
 			cout<<	"last_check_point"<<last_check_point<<endl;
 			cout<<"*************************************************************************"<<endl;
-
+*/
 			cog_hmp_ActionNumber=HMP_max_element;
 			cognitionHMP_flag=false;
 
@@ -348,11 +348,11 @@ void cognitionClass::reasoningHMP(){
 		reasoningHMP_flag=false;
 
 	}
-	// NOn of the actions: i think this one should be commented now also do not make cognitionHMP_flag false there now!
+	// Non of the actions: i think this one should be commented now also do not make cognitionHMP_flag false there now!
 	if (cog_hmp_ActionNumber==4)
 	{
 		reas_hmp_ActionNumber=cog_hmp_ActionNumber;
-		cout<<hmp_ActionsName[reas_hmp_ActionNumber]<<endl;
+//		cout<<hmp_ActionsName[reas_hmp_ActionNumber]<<endl;
 		reasoningHMP_flag=true;
 	}
 	cognitionHMP_flag=true;

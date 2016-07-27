@@ -116,18 +116,6 @@ endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nod
 	action_list[24][0]	="HoldOn";						action_list[24][1]	="R";	action_list[24][2]	="holdOn left";													action_list[24][3]	="holdOn right";
 	action_list[25][0]	="HoldOff";						action_list[25][1]	="R";	action_list[25][2]	="stopArm left";												action_list[25][3]	="stopArm right";
 
-	//node_action_list[4][1]="UnGrasp";// Check again later
-	//node_action_list[4][1]="HandOverRightPoint1";// Check again later
-	//node_action_list[4][2]="GraspRight";
-	//node_action_list[4][3]="HandOverPoint2";// Check again later
-	//node_action_list[4][4]="HandOverLeftPoint3";// Check again later
-	//node_action_list[4][5]="GraspLeft";// Check again later
-	//node_action_list[4][6]="0";// Check again later
-
-	//node_action_list[4][1]="HandOverLeftPoint2";// delete this line later
-
-
-//	string n_2_1_actions[]={"Screwing","PutDown"};
 }
 void endorActionClass::nodeListFunction(void){
 	// check for the node number we want to solve: (endorClass-endorAction)
@@ -135,8 +123,6 @@ void endorActionClass::nodeListFunction(void){
 		suggested_Node="plate_screw_screwPos1";
 	else if (solved_Node=="plate_screw_initialPos" && suggested_Node=="plate_screw_screwPos")
 		suggested_Node="plate_screw_screwPos2";
-
-
 
 	for(int i=0;i<Number_of_Nodes;i++)
 			if (node_list[i][0]==suggested_Node)
@@ -149,7 +135,6 @@ void endorActionClass::nodeListFunction(void){
 void endorActionClass::nodeActionListFunction(void){
 
 
-	//cout<<"**************** node_action_list[node_number][0]: "<<node_action_list[node_number][0]<<endl;
 	// when the last action of a node is done:
 	if (actionNumber==nodeActionList_width-1)
 	{
@@ -157,8 +142,6 @@ void endorActionClass::nodeActionListFunction(void){
 
 		if (solved_Node=="plate_screw_screwPos1" || solved_Node=="plate_screw_screwPos2")
 			solved_Node="plate_screw_screwPos";
-
-		cout<<"***************** solved_Node1: "<<solved_Node<<endl;
 
 		actionFlag=true; /* we should have this action changehere otherwise it
 							will go	inside next if condition which it should not go */
@@ -170,11 +153,9 @@ void endorActionClass::nodeActionListFunction(void){
 			then we should not chack for next element*/
 	if (actionFlag==false)
 	{
-		cout<<"actionNumber1: "<<actionNumber<<endl;
 		actionNumber=actionNumber+1;
 		suggested_action=node_action_list[node_number][actionNumber];
-		cout<<"suggested_action: "<<suggested_action<<endl;
-		cout<<"actionNumber2: "<<actionNumber<<endl;
+
 		if (actionNumber>0 && node_action_flag[node_number][actionNumber-1]==0)
 			cout<<"Previous action in this node is not solved"<<endl;
 		///		actionFlag=true;
@@ -189,13 +170,9 @@ void endorActionClass::nodeActionListFunction(void){
 ///			actionFlag=true;
 			nodeFlag=false;
 			actionNumber=-1;
-			cout<<"solved_Node"<<solved_Node<<endl;
-			cout<<"actionNumber3: "<<actionNumber<<endl;
 		}
 	}
 	actionFlag=true;
-
-
 
 }
 void endorActionClass::ActionListFunction(void){
@@ -204,13 +181,9 @@ void endorActionClass::ActionListFunction(void){
 		for(int i=0;i<Number_of_Actions;i++)
 			if (action_list[i][0]==suggested_action)
 			{
-				cout<<"**-->> i: "<<i<<endl;
 				responsible=action_list[i][1];
 				actionCommand[0]=action_list[i][2];
 				actionCommand[1]=action_list[i][3];
-
-				cout<<"**-->> responsible: "<<responsible<<endl;
-				cout<<"**-->> actionCommand: "<<actionCommand[0]<<"\t"<<actionCommand[1]<<endl;
 			}
 }
 
@@ -237,18 +210,18 @@ void endorActionClass::humanActionSearch(string human_action_name, AOgraph& mygr
 						suggested_node_number=zz;
 						suggested_action_number=cc;//+2
 						node_action_flag[zz][cc]=-1;
-						cout<<"***** "<<mygraph_EA.NodeNameInfo(zz)<<" *****"<<endl;
-						cout<<"obj_nodeAction.node_action_list[zz][cc]"<<node_action_list[zz][cc]<<endl;
-						cout<<"obj_cognition.cognitionHMP_get()"<<human_action_name<<endl;
-						cout<<"obj_nodeAction.node_action_flag[zz][cc]"<<node_action_flag[zz][cc]<<endl;
-						cout<<"ambiguity_Number"<<ambiguity_Number<<endl;
+//						cout<<"***** "<<mygraph_EA.NodeNameInfo(zz)<<" *****"<<endl;
+//						cout<<"obj_nodeAction.node_action_list[zz][cc]"<<node_action_list[zz][cc]<<endl;
+//						cout<<"obj_cognition.cognitionHMP_get()"<<human_action_name<<endl;
+//						cout<<"obj_nodeAction.node_action_flag[zz][cc]"<<node_action_flag[zz][cc]<<endl;
+//						cout<<"ambiguity_Number"<<ambiguity_Number<<endl;
 						break;
 					}
-					cout<<"*** "<<mygraph_EA.NodeNameInfo(zz)<<" ***"<<endl;
-					cout<<"obj_nodeAction.node_action_list[zz][cc]"<<node_action_list[zz][cc]<<endl;
-					cout<<"obj_cognition.cognitionHMP_get()"<<human_action_name<<endl;
-					cout<<"obj_nodeAction.node_action_flag[zz][cc]"<<node_action_flag[zz][cc]<<endl;
-					cout<<"ambiguity_Number"<<ambiguity_Number<<endl;
+//					cout<<"*** "<<mygraph_EA.NodeNameInfo(zz)<<" ***"<<endl;
+//					cout<<"obj_nodeAction.node_action_list[zz][cc]"<<node_action_list[zz][cc]<<endl;
+//					cout<<"obj_cognition.cognitionHMP_get()"<<human_action_name<<endl;
+//					cout<<"obj_nodeAction.node_action_flag[zz][cc]"<<node_action_flag[zz][cc]<<endl;
+//					cout<<"ambiguity_Number"<<ambiguity_Number<<endl;
 					cc++;
 				}
 				while( node_action_list[zz][cc]!="0" &&( node_action_flag[zz][cc-1]==1 || node_action_flag[zz][cc-1]==-1) && cc <nodeActionList_width);
@@ -294,7 +267,7 @@ void endorActionClass::humanActionSearch(string human_action_name, AOgraph& mygr
 			for (int f1=0;f1<nodeActionList_width;f1++)
 				node_action_flag[node_number][f1]=0;
 
-			cout<<"ambiguity_Number: "<<ambiguity_Number<<endl;
+			cout<<">>> ambiguity_Number: "<<ambiguity_Number<<endl;
 			cout<<FRED("Human Is Not Following Optimal Path")<<endl;
 			///Human_Gesture_Flag=true;
 			node_number=suggested_node_number;
@@ -322,7 +295,7 @@ void endorActionClass::humanActionSearch(string human_action_name, AOgraph& mygr
 
 	else if (ambiguity_Number>1)
 	{
-		cout<<"ambiguity_Number: "<<ambiguity_Number<<endl;
+		cout<<">>> ambiguity_Number: "<<ambiguity_Number<<endl;
 		cout<<FRED("******************* Ambiguity in Endor  ***********************")<<endl;
 		cout<<FRED("*** Human Continue your Actions Until Ambiguity is Solved!  ***")<<endl;
 		if (responsible=="H")
