@@ -24,8 +24,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
-#include <sys/ioctl.h>
-//#include <linux/kd.h >
 
 // cout colors and options:
 #define RST  "\x1B[0m"
@@ -39,23 +37,28 @@
 using namespace std;
 using namespace std::chrono;
 
-
-
 int main(int argc, char** argv) {
-	fprintf(stdout, "\aBeep!\n" );
+
+
 
 /*	struct timeval tp;
 	gettimeofday(&tp, NULL);
 	unsigned long int ms0 ;
 	ms0 = tp.tv_sec * 1000000 + tp.tv_usec ; // return the value in micro sec. (tv_sec:sec, tv_usec:micro second)*/
 
-	microseconds ms_planning_start,ms_planning_stop, ms_robot_start, ms_robot_stop, ms_human_start, ms_human_stop, ms_assembly_start, ms_assembly_stop;
+	microseconds ms_Gesture_time,ms_planning_start,ms_planning_stop, ms_robot_start, ms_robot_stop, ms_human_start, ms_human_stop, ms_assembly_start, ms_assembly_stop;
 
-	ofstream Myfile1;
-	const char* DataLogPath	="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
-	string DataLogPath2		="/home/nasa/Datalog/HRI/Datalog/1_FirstTests";
+	//ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+	//system("canberra-gtk-play -f /home/nasa/Downloads/PickUp.wav");
+	//ms_human_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+	//cout<<ms_human_start.count()<<endl<<ms_human_stop.count()<<endl;
+
+	ofstream Myfile1,Myfile2;
+	const char* DataLogPath	="/home/nasa/Datalog/HRI/Datalog/2_ICRA_Tests";
+	string DataLogPath2		="/home/nasa/Datalog/HRI/Datalog/2_ICRA_Tests";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/5_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/1_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile2.open ((DataLogPath2+"/1_Gesture_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
@@ -304,6 +307,9 @@ int main(int argc, char** argv) {
 				if (obj_nodeAction.responsible=="H")
 				{
 					cout<<FBLU(">>>>>> Human: ")<<obj_nodeAction.actionCommand[0]<<endl;
+					if (obj_nodeAction.actionCommand[0]=="pickUp")
+						system("canberra-gtk-play -f /home/nasa/Downloads/PickUp.wav");
+
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
 					if (obj_nodeAction.actionCommand[0]=="PickUp")
@@ -370,6 +376,10 @@ int main(int argc, char** argv) {
 			}
 	*/
 			Human_Gesture_Flag=false;
+
+			ms_Gesture_time= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+			Myfile2 <<ms_Gesture_time.count()<<" "<<obj_cognition.cognitionHMP_get()<<"\n";
+
 		}
 
 
