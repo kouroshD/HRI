@@ -52,7 +52,7 @@ cognitionClass::cognitionClass(int no_hmp_out1){
 		percentage_check_max[i]=0.9;
 		hmp_ActionsName[i]="0";
 	}
-	percentage_check_max[2]=0.95;// put down needs less max_check point!
+	percentage_check_max[2]=0.965;// put down needs less max_check point!
 	hmp_ActionsName[NO_OUTPUT_HMP]="NonOfTheActions";
 
 	last_check_point=-10;// maybe when the program start the first possibily be the highest one!

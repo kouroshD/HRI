@@ -52,13 +52,16 @@ int main(int argc, char** argv) {
 	//system("canberra-gtk-play -f /home/nasa/Downloads/PickUp.wav");
 	//ms_human_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 	//cout<<ms_human_start.count()<<endl<<ms_human_stop.count()<<endl;
+	cout<<"*********************************************************"<<endl;
+	cout<<"******************** Test 65 (Path:1) ********************"<<endl;
+	cout<<"*********************************************************"<<endl;
 
 	ofstream Myfile1,Myfile2;
-	const char* DataLogPath	="/home/nasa/Datalog/HRI/Datalog/2_ICRA_Tests";
-	string DataLogPath2		="/home/nasa/Datalog/HRI/Datalog/2_ICRA_Tests";
+	const char* DataLogPath	="/home/nasa/Datalog/ICRA_TESTS";
+	string DataLogPath2		="/home/nasa/Datalog/ICRA_TESTS";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/1_Assembly_Timing.txt").c_str(),ios::app);
-	Myfile2.open ((DataLogPath2+"/1_Gesture_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/65_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile2.open ((DataLogPath2+"/65_Gesture_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
@@ -123,7 +126,7 @@ int main(int argc, char** argv) {
 	float paramCtrlInit [noParamCtrlInit];// Initial Parameters of Controller
 	float paramCtrl[noParamCtrl];// first input: set Data: 1, or get Data:0
 
-	int max_time_rob_reach_goal=500;//sec
+	int max_time_rob_reach_goal=15;//sec
 	int hri_ros_freq=80;//hz
 	ros::Rate loop_rate(hri_ros_freq);//Based on 2nd may discussion with Fulvio.
 	long int count=0;
