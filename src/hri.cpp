@@ -14,16 +14,16 @@
 #include "std_msgs/String.h"
 #include <stdio.h>
 #include <ros/callback_queue.h>
-#include "CallBackClass.hpp"
-#include "cognitionClass.hpp"
-#include "endorAction.hpp"
-#include "endor/aonode.h"
-#include "endor/aograph.h"
 #include <stdlib.h>
 #include <chrono>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
+
+#include "aonode.h"
+#include "aograph.h"
+#include "CallBackClass.hpp"
+#include "endorAction.hpp"
 
 // cout colors and options:
 #define RST  "\x1B[0m"
@@ -37,14 +37,15 @@
 using namespace std;
 using namespace std::chrono;
 
+
+
 int main(int argc, char** argv) {
-
-
 
 /*	struct timeval tp;
 	gettimeofday(&tp, NULL);
 	unsigned long int ms0 ;
-	ms0 = tp.tv_sec * 1000000 + tp.tv_usec ; // return the value in micro sec. (tv_sec:sec, tv_usec:micro second)*/
+	ms0 = tp.tv_sec * 1000000 + tp.tv_usec ; // return the value in micro sec. (tv_sec:sec, tv_usec:micro second)
+	*/
 
 	microseconds ms_Gesture_time,ms_planning_start,ms_planning_stop, ms_robot_start, ms_robot_stop, ms_human_start, ms_human_stop, ms_assembly_start, ms_assembly_stop;
 
@@ -53,27 +54,22 @@ int main(int argc, char** argv) {
 	//ms_human_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 	//cout<<ms_human_start.count()<<endl<<ms_human_stop.count()<<endl;
 	cout<<"*********************************************************"<<endl;
-	cout<<"******************** Test 65 (Path:1) ********************"<<endl;
+	cout<<"******************** Test 67 (Path:1) ********************"<<endl;
 	cout<<"*********************************************************"<<endl;
 
 	ofstream Myfile1,Myfile2;
 	const char* DataLogPath	="/home/nasa/Datalog/ICRA_TESTS";
 	string DataLogPath2		="/home/nasa/Datalog/ICRA_TESTS";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/65_Assembly_Timing.txt").c_str(),ios::app);
-	Myfile2.open ((DataLogPath2+"/65_Gesture_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/67_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile2.open ((DataLogPath2+"/67_Gesture_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
 
-	ros::Publisher pub_HMP_cmnd	=nh.advertise<std_msgs::String>("HMPCommand",1);// SA_arrow No:5
-	//ros::Publisher pub_HMP_cmnd	=nh.advertise<std_msgs::String>("HMPAck",1);// SA_arrow No:5
 	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_control_command",1);//SA_arrow No:8
 	ros::Publisher pub_ctrl_error=nh.advertise<std_msgs::String>("hri_control_error_check",1);//SA_arrow No:8
 
-	//ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_control_ack",1);//SA_arrow No:8
-	//CallBackClass obj_callback;// callback class of subscribers
-	//cognitionClass obj_cognition;
 
 	// Arm left=0; Arm right=1;
 	const int NO_ARMS=2;
@@ -101,17 +97,17 @@ int main(int argc, char** argv) {
 
 
 	// Parameter Numbers of Controller and HMP
-	int noParamHMPInit=1;//Initial HMP Parameters: 		HMP type
-	int noParamHMP=1+4;//Execution HMP Parameters		[0: set/get;	1-noOutputHMP:ModelsName; 4-4 Actions Parameters,]
-	string modelName="HRIGHMPure"; //name of the model we use in HMP package.
-	int noOutputHMP=4; // Number of output from HMP
+		int noParamHMPInit=1;//Initial HMP Parameters: 		HMP type
+		int noParamHMP=1+4;//Execution HMP Parameters		[0: set/get;	1-noOutputHMP:ModelsName; 4-4 Actions Parameters,]
+	////	string modelName="HRIGHMPure"; //name of the model we use in HMP package.
+		int noOutputHMP=4; // Number of output from HMP
 
 	/* parameter and functions Initialization of the classes:*/
 
 	//obj_cognition.NoOutputHMP=noOutputHMP;
 //	obj_cognition.NO_OUTPUT_HMP=noOutputHMP;
 
-	cognitionClass obj_cognition(noOutputHMP);
+	////	cognitionClass obj_cognition(noOutputHMP);
 	CallBackClass obj_callback(noParamHMP,noOutputHMP);// callback class of subscribers
 
 
@@ -143,23 +139,11 @@ int main(int argc, char** argv) {
 	char HMP_init_param_change, ctrl_init_param_change;// check yes/no for changing initial questions of hmp/ctrl
 	int HMP_type_no,ctrl_type_no, ctrl_mode_no; // choosing type and mode of ctrl, hmp methods.
 
-	cout<<"\n\n"<<BOLD(FGRN("Default HMP Type is GMM. If it is OK Press <y>,"
-			" Otherwise Press <n>: "));
-	cin>>HMP_init_param_change;
-	// if HMP initial question:yes-> initial HMP flag to false.
-	if (HMP_init_param_change=='n') {
-		obj_callback.HMP_initial_command_flag=false;
-		cout<<"Which HMP method do you want to use:"<<endl;
-		cout<<"GMM: press 1:"<<endl<<"KF: press 2:"<<endl<<"PF: press 3 \t";
-		cin>>HMP_type_no;
-		paramHMPInit[0]=HMP_type_no;
-	}
-
 	cout<<BOLD(FGRN("Default Control Type is 'PID' & Default Control Mode is 'Velocity'"
 			" If it is OK Press <y>, Otherwise Press <n>: "));
 	cin>>ctrl_init_param_change;
-	// If CTRL initial question:yes-> initial ctrl flag to false.
-	if (ctrl_init_param_change=='n') {
+	// If CTRL initial question:yes -> initial ctrl flag to false.
+	if (ctrl_init_param_change=='n'){
 		obj_callback.control_initial_command_flag=false;
 
 		cout<<"Which Control Mode you want to use:"<<endl;
@@ -174,35 +158,29 @@ int main(int argc, char** argv) {
 		paramCtrlInit[1]=ctrl_type_no;
 	}
 
-//*** 	 And-Or Graph Initialization:		***//
+/*!
+ *  	 And-Or Graph Initialization:
+ */
 
 	// Graph Name and Location
 	int ambiguity_Number=0;
 	int cc=0;
 	int suggested_node_number=0, suggested_action_number=0;
-	string description = "/home/nasa/catkin_ws/src/hri/src/endor/assemblies/screwing_task.txt";
+	string description = "/home/nasa/catkin_ws/src/hri/include/assemblies/screwing_task.txt";
 	string graphName="screwing_task";
 
-
-
-
-	//obj_endorAct.nodeActionList();
+	// AND/OR initialization
 	AOgraph myGraph = AOgraph(graphName);
 
 	obj_nodeAction.solved_Node=myGraph.loadFromFile(description); // initialization of the first to do;
 	obj_nodeAction.nodeFlag=false;
-	char d=(char)(7);
-	printf("%c\n",d);
 
-	std::cout << '\7';
-	std::cout << '\a';
+
 
 	while (ros::ok()) {
 
 
-//***	Cognition		***//
-
-	//*** Endor
+	//! AND/OR graph
 		// when a node is solved, suggesting another node:
 		if (count>5 && obj_nodeAction.nodeFlag==false)
 		{
@@ -231,8 +209,6 @@ int main(int argc, char** argv) {
 			obj_nodeAction.suggested_Node=myGraph.suggestNext(1);//
 			///cout<<">>>>>obj_nodeAction.suggested_Node: "<<obj_nodeAction.suggested_Node<<endl;
 			obj_nodeAction.nodeListFunction();
-
-
 		}
 		// when a action is solved, suggesting another action:
 		//cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>actionFlag: "<<obj_nodeAction.actionFlag<<endl;
@@ -243,7 +219,8 @@ int main(int argc, char** argv) {
 			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 			Myfile1 <<ms_planning_start.count()<<" "<<"planningStart"<<"\n";
 
-			obj_nodeAction.humanActionSearch(obj_cognition.cognitionHMP_get(),myGraph);
+	////		obj_nodeAction.humanActionSearch(obj_cognition.cognitionHMP_get(),myGraph); // recognized action
+			obj_nodeAction.humanActionSearch(obj_callback.recognized_action_human,myGraph); // recognized action
 			ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 			Myfile1 <<ms_planning_stop.count()<<" "<<"planningStop"<<"\n";
 
@@ -284,12 +261,12 @@ int main(int argc, char** argv) {
 
 			}
 			Human_Gesture_Flag=true;
-			cout<<"node_action_flag:"<<endl;
-			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
-				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
-					cout<<"\t"<<obj_nodeAction.node_action_flag[g1][f1];
-				cout<<endl;
-				}
+//			cout<<"node_action_flag:"<<endl;
+//			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
+//				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
+//					cout<<"\t"<<obj_nodeAction.node_action_flag[g1][f1];
+//				cout<<endl;
+//				}
 		}
 
 
@@ -346,30 +323,28 @@ int main(int argc, char** argv) {
 
 	//*** HMP Cognition:
 		// in this if condition we get the name of the actions coming from HMP-Detector:
-		if (obj_callback.HMP_parameter_cognition_flag==false)
-		{
-		for(int k1=0;k1<noOutputHMP;k1++)
-			obj_cognition.hmp_ActionsName[k1]=obj_callback.parameterHMP[1+k1];//??
-		obj_callback.HMP_parameter_cognition_flag=true;
-		}
+		////		if (obj_callback.HMP_parameter_cognition_flag==false)
+		////		{
+		////		for(int k1=0;k1<noOutputHMP;k1++)
+		////			obj_cognition.hmp_ActionsName[k1]=obj_callback.parameterHMP[1+k1];//??
+		////obj_callback.HMP_parameter_cognition_flag=true;
+		////}
 
+		////if (obj_callback.HMP_cognition_flag==false)
+		////{
+		////	obj_cognition.cognitionHMP_set(obj_callback.HMPOutput);
+		////	obj_cognition.cognitionHMP();
+		////	obj_callback.HMP_cognition_flag=true;
+		////}
 
-		if (obj_callback.HMP_cognition_flag==false)
-		{
-			obj_cognition.cognitionHMP_set(obj_callback.HMPOutput);
-			obj_cognition.cognitionHMP();
-			obj_callback.HMP_cognition_flag=true;
-		}
-
-		if (obj_cognition.cognitionHMP_flag==false)
-		{
-			obj_cognition.reasoningHMP();
-
-		}
+		////if (obj_cognition.cognitionHMP_flag==false)
+		////{
+		////	obj_cognition.reasoningHMP();
+		////}
 	///	if (obj_cognition.reasoningHMP_flag==false && obj_nodeAction.actionFlag==true)// maybe: check responsible: "H"
-			if (obj_cognition.reasoningHMP_flag==false )// maybe: check responsible: "H"
-		{
-			cout<<">>>>> Recognized Action:\t"<<obj_cognition.cognitionHMP_get()<<endl;
+		////	if (obj_cognition.reasoningHMP_flag == false )// maybe: check responsible: "H"
+		////{	// we change the class from  obj_cognition -> obj_callback
+		////	cout<<">>>>> Recognized Action1111:\t"<<obj_cognition.cognitionHMP_get()<<endl;
 			// if the action recognized by hmp reasoning == action suggested
 				//previously by andorAction, it means it is solved and another action should be suggested
 			// we should delete next if condition:
@@ -378,15 +353,25 @@ int main(int argc, char** argv) {
 				obj_nodeAction.actionFlag=false;
 			}
 	*/
-			Human_Gesture_Flag=false;
+		//	Human_Gesture_Flag=false;
 
+		////	ms_Gesture_time= duration_cast< microseconds >(system_clock::now().time_since_epoch());
+		////	Myfile2 <<ms_Gesture_time.count()<<" "<<obj_cognition.cognitionHMP_get()<<"\n";
+
+		////		}
+
+			if (obj_callback.rec_human_action_flag == false )// maybe: check responsible: "H"
+		{	// we change the class from  obj_cognition -> obj_callback
+			cout<<">>>>> Recognized Action:\t"<<obj_callback.recognized_action_human<<endl;
+			Human_Gesture_Flag=false;
+			obj_callback.rec_human_action_flag = true;
 			ms_Gesture_time= duration_cast< microseconds >(system_clock::now().time_since_epoch());
-			Myfile2 <<ms_Gesture_time.count()<<" "<<obj_cognition.cognitionHMP_get()<<"\n";
+			Myfile2 <<ms_Gesture_time.count()<<" "<<obj_callback.recognized_action_human<<"\n";
 
 		}
 
-
 //***	HMP		***//
+/*
 
 	// HMP Initial Parameters
 		if (obj_callback.HMP_initial_command_flag==false) {
@@ -417,7 +402,7 @@ int main(int argc, char** argv) {
 		}
 
 	// Flag check
-		if (count>=HMP_count+5 &&obj_callback.HMP_ack_flag==false) {
+		if (count>=HMP_count+5 && obj_callback.HMP_ack_flag==false) {
 			HMP_command_flag=false;
 			HMP_count=count;
 		}
@@ -435,6 +420,7 @@ int main(int argc, char** argv) {
 			pub_HMP_cmnd.publish(msg_HMPPar);
 			HMP_command_flag=true;
 		}
+*/
 
 //***	Control		***//
 
@@ -478,12 +464,12 @@ int main(int argc, char** argv) {
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";
 
-			cout<<"node_action_flag:"<<endl;
-			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
-				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
-					cout<<"\t"<<obj_nodeAction.node_action_flag[g1][f1];
-				cout<<endl;
-				}
+//			cout<<"node_action_flag:"<<endl;
+//			for (int g1=0;g1<(obj_nodeAction.Number_of_Nodes);g1++)
+//				{for (int f1=0;f1<(obj_nodeAction.nodeActionList_width);f1++)// No of hyper arcs again, not the nodes?
+//					cout<<"\t"<<obj_nodeAction.node_action_flag[g1][f1];
+//				cout<<endl;
+//				}
 		}
 		else if(rob_goal_reach_flag_counter==NO_ARMS && Gesture_Flag_Resolved==false)
 		{

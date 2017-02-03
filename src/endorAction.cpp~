@@ -76,7 +76,7 @@ endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nod
 	node_action_list[4][0]="UnGrasp";			node_action_list[4][1]="HandOver2InitialPos";	node_action_list[4][2]="HandOverRightPoint1";		node_action_list[4][3]="HandOverRightPoint2";	node_action_list[4][4]="GraspRight"; 				node_action_list[4][5]="HandOverRightPoint3";	node_action_list[4][6]="HandOverPoint4";	node_action_list[4][7]="HandOverLeftPoint5"; 	node_action_list[4][8]="GraspLeft";
 	node_action_list[5][0]="PickUp";			node_action_list[5][1]="ScrewingInitial";		node_action_list[5][2]="PutDown";					node_action_list[5][3]="0";						node_action_list[5][4]="0";							node_action_list[5][5]="0";						node_action_list[5][6]="0";					node_action_list[5][7]="0";						node_action_list[5][8]="0";
 	node_action_list[6][0]="0";					node_action_list[6][1]="0";						node_action_list[6][2]="0";							node_action_list[6][3]="0";						node_action_list[6][4]="0";							node_action_list[6][5]="0";						node_action_list[6][6]="0";					node_action_list[6][7]="0";						node_action_list[6][8]="0";
-	node_action_list[7][0]="HoldOn";			node_action_list[7][1]="0";						node_action_list[7][2]="0";							node_action_list[7][3]="0";						node_action_list[7][4]="0";							node_action_list[7][5]="0";						node_action_list[7][6]="0";					node_action_list[7][7]="0";						node_action_list[7][8]="0";
+	node_action_list[7][0]="0";					node_action_list[7][1]="0";						node_action_list[7][2]="0";							node_action_list[7][3]="0";						node_action_list[7][4]="0";							node_action_list[7][5]="0";						node_action_list[7][6]="0";					node_action_list[7][7]="0";						node_action_list[7][8]="0";
 	node_action_list[8][0]="0";					node_action_list[8][1]="0";						node_action_list[8][2]="0";							node_action_list[8][3]="0";						node_action_list[8][4]="0";							node_action_list[8][5]="0";						node_action_list[8][6]="0";					node_action_list[8][7]="0";						node_action_list[8][8]="0";
 	node_action_list[9][0]="UnGrasp";			node_action_list[9][1]="HandOver2InitialPos";	node_action_list[9][2]="HandOverRightPoint1";		node_action_list[9][3]="HandOverRightPoint2";	node_action_list[9][4]="GraspRight"; 				node_action_list[9][5]="HandOverRightPoint3";	node_action_list[9][6]="HandOverPoint4";	node_action_list[9][7]="HandOverLeftPoint5"; 	node_action_list[9][8]="GraspLeft";
 
@@ -113,7 +113,7 @@ endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nod
 	action_list[21][0]	="HandOverLeftPoint7";			action_list[21][1]	="R";	action_list[21][2]	="jointPos left -0.706 0.360 0.054 0.166 -1.490 -0.225 -1.806";	action_list[21][3]	="0";
 	action_list[22][0]	="Grasp";						action_list[22][1]	="R";	action_list[22][2]	="closeGrip left"; 												action_list[22][3]	="closeGrip right";
 	action_list[23][0]	="UnGrasp";						action_list[23][1]	="R";	action_list[23][2]	="openGrip left"; 												action_list[23][3]	="openGrip right";
-	action_list[24][0]	="HoldOn";						action_list[24][1]	="R";	action_list[24][2]	="holdMode left 1";												action_list[24][3]	="holdMode right 1";
+	action_list[24][0]	="HoldOn";						action_list[24][1]	="R";	action_list[24][2]	="holdOn left";													action_list[24][3]	="holdOn right";
 	action_list[25][0]	="HoldOff";						action_list[25][1]	="R";	action_list[25][2]	="stopArm left";												action_list[25][3]	="stopArm right";
 
 }

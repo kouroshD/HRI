@@ -14,7 +14,7 @@
 #include <iterator>
 #include <sstream>
 #include "aograph.h"
-#include "aonode.h"
+#include "src/aonode.h"
 
 #define RST  "\x1B[0m"
 #define KBLU  "\x1B[34m"

@@ -8,12 +8,15 @@
 #include <algorithm>
 #include <fstream>
 
-#include "aonode.h"
-
+#include "src/aonode.h"
+//#include "endorAction.hpp"
 using namespace std;
 
 #ifndef AOGRAPH_H
 #define AOGRAPH_H
+class endorActionClass;
+//class AOgraph;
+//void endorActionClass::humanActionSearch(string, AOgraph&);
 
 //! class "Path" for each unique path traversing the graph from the head to the leaves
 class Path
@@ -72,7 +75,7 @@ class AOgraph
         void generatePaths();
         
         //! set up a graph
-        void setupGraph();
+        string setupGraph();
         
         //** GRAPH NAVIGATION **//
         //! find the hyperarc connecting a parent to a child node
@@ -99,22 +102,29 @@ class AOgraph
 		AOgraph(string name);
         
         //! load the graph description from a file
-        void loadFromFile(string fileName);
+        string loadFromFile(string fileName);
         
         //! display graph information
         void printGraphInfo();
+        bool NodeFeasibiltyInfo(int);
+        bool NodeSolveInfo(int);
+        string NodeNameInfo(int);
         
         //! suggest the node to solve
         string suggestNext(bool strategy);
         
         //! solve a node, finding it by name
         void solveByName(string nameNode);
+        //friend void endorActionClass::humanActionSearch(string, AOgraph&);
+        friend class endorActionClass;
+        // define friend Class
         
         //! destructor
 		~AOgraph()
 		{
 			//DEBUG:cout<<endl <<"Destroying AOgraph object" <<endl;
 		}
+
 };
 
 #endif

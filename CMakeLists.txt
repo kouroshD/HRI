@@ -19,11 +19,18 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   baxter_core_msgs
+  message_generation
+  std_msgs
+)
+
+include_directories(
+	INCLUDE_DIRS
+	include/
 )
 
 #Is for add the .o files to devel/lib
 catkin_package(
-   CATKIN_DEPENDS
+ CATKIN_DEPENDS baxter_core_msgs message_generation roscpp rospy std_msgs 
 )
 
 ## Specify additional locations of header files
@@ -34,21 +41,24 @@ include_directories(
 )
 
 #ADD_LIBRARY(endor /home/nasa/Documents/Endor/endor-master/aograph.cpp)
+add_library(aonode include/aonode.cpp)
+add_library(aograph include/aograph.cpp)
+add_library(CallBackClass src/CallBackClass.cpp)
+add_library(endorAction src/endorAction.cpp)
+
 
 ## Declare a C++ executable
 # name  name.cpp
-add_executable(hri src/hri.cpp 
-		src/CallBackClass.hpp 	src/CallBackClass.cpp 
-		src/cognitionClass.hpp 	src/cognitionClass.cpp
-		#src/endor/aograph.cpp	src/endor/aograph.h
-		#src/endor/aonode.cpp 	src/endor/aonode.h)
-		src/endor/aograph.cpp	src/endor/aograph.h
-		src/endor/aonode.cpp 	src/endor/aonode.h
-		src/endorAction.cpp	src/endorAction.hpp)
+add_executable(hri src/hri.cpp)
 
-
+add_dependencies(hri baxter_core_msgs_generate_messages_cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(hri
    ${catkin_LIBRARIES}
+  aonode
+  aograph
+  CallBackClass
+  endorAction
  )
+target_link_libraries(aograph aonode)
 

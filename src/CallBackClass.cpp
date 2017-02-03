@@ -15,6 +15,8 @@ CallBackClass::CallBackClass(int NoParameterHMP1,int NoOutputHMP1) {
 	control_ack_flag[0]			=true;
 	control_ack_flag[1]			=true;
 
+	rec_human_action_flag		=true;
+
 	control_initial_command_flag=true;
 	HMP_parameter_cognition_flag=true;
 	hri_control_goal_flag[0]	=true;
@@ -23,17 +25,20 @@ CallBackClass::CallBackClass(int NoParameterHMP1,int NoOutputHMP1) {
 	rob_goal_reach_flag[1]			=true;
 	sub_HMPAck	=nh.subscribe("HMPAck",80, &CallBackClass::HMPAckCallBack, this);
 	sub_HMPOut	=nh.subscribe("HMPOutput",1, &CallBackClass::HMPOutputCallBack, this);
+	sub_HRecAction	=nh.subscribe("HRecAction",1, &CallBackClass::HRecActionCallBack, this);
+
 	sub_CtrlAck	=nh.subscribe("hri_control_ack",80, &CallBackClass::ControlAckCallBack, this);
 	sub_CtrlOut	=nh.subscribe("controlOutput",1, &CallBackClass::ControlOutputCallBack, this);
-	sub_JntSt	=nh.subscribe("robot/joint_states",1, &CallBackClass::RobotJointStatesCallBack, this);
-	sub_LGrip	=nh.subscribe("robot/end_effector/left_gripper/state",1,&CallBackClass::RobotLeftGripperStatesCallBack, this);
-	sub_RGrip	=nh.subscribe("robot/end_effector/right_gripper/state",1,&CallBackClass::RobotRightGripperStatesCallBack, this);
+//	sub_JntSt	=nh.subscribe("robot/joint_states",1, &CallBackClass::RobotJointStatesCallBack, this);
+//	sub_LGrip	=nh.subscribe("robot/end_effector/left_gripper/state",1,&CallBackClass::RobotLeftGripperStatesCallBack, this);
+//	sub_RGrip	=nh.subscribe("robot/end_effector/right_gripper/state",1,&CallBackClass::RobotRightGripperStatesCallBack, this);
 	NoParameterHMP=NoParameterHMP1;
 	parameterHMP=new string [NoParameterHMP];
 
 	for (int ii=0;ii<NoParameterHMP;ii++)
 	{	parameterHMP[ii]="0";
 	}
+	recognized_action_human="0";
 
 	NoOutputHMP=NoOutputHMP1;
 	HMPOutput=new float[NoOutputHMP];
@@ -96,6 +101,10 @@ void CallBackClass::HMPOutputCallBack(const std_msgs::String::ConstPtr& msg) {
 	HMP_cognition_flag=false;
 }
 
+void CallBackClass::HRecActionCallBack(const std_msgs::String::ConstPtr& msg) {
+	recognized_action_human=msg-> data.c_str();
+	rec_human_action_flag=false;
+}
 // Control
 void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
 	ROS_INFO("I heard Control Ack: [%s]", msg->data.c_str());
@@ -146,7 +155,7 @@ void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
 void CallBackClass::ControlOutputCallBack(const std_msgs::String::ConstPtr& msg) {
 //	ROS_INFO("I heard Control Output: [%s]", msg->data.c_str());
 }
-
+/*
 //	BAXTER
 void CallBackClass::RobotJointStatesCallBack(sensor_msgs::JointState stateMsg) {
 	///ROS_INFO("I heard Robot Joint States:");
@@ -161,3 +170,4 @@ void CallBackClass::RobotLeftGripperStatesCallBack(const baxter_core_msgs::EndEf
 void CallBackClass::RobotRightGripperStatesCallBack(const baxter_core_msgs::EndEffectorState::ConstPtr& stateMsg) {
 	///ROS_INFO("I heard Robot Right Gripper States:");
 }
+*/
