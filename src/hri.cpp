@@ -67,8 +67,8 @@ int main(int argc, char** argv) {
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
 
-	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_control_command",1);//SA_arrow No:8
-	ros::Publisher pub_ctrl_error=nh.advertise<std_msgs::String>("hri_control_error_check",1);//SA_arrow No:8
+	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_control_command",1);
+	ros::Publisher pub_ctrl_error=nh.advertise<std_msgs::String>("hri_control_error_check",1);
 
 
 	// Arm left=0; Arm right=1;
@@ -454,6 +454,7 @@ int main(int argc, char** argv) {
 		for (int i1=0;i1<NO_ARMS;i1++)
 			if (obj_callback.rob_goal_reach_flag[i1]==false )
 				rob_goal_reach_flag_counter++;
+//		when: "rob_goal_reach_flag_counter==NO_ARMS" it means that both arms reached their goal
 		if(rob_goal_reach_flag_counter==NO_ARMS && Gesture_Flag_Resolved==true)
 		{
 			obj_nodeAction.actionFlag=false;
