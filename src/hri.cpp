@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
 
-	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_control_command",1);
+	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_robot_command",1);
 	ros::Publisher pub_ctrl_error=nh.advertise<std_msgs::String>("hri_control_error_check",1);
 
 
