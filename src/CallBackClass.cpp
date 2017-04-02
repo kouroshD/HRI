@@ -27,7 +27,7 @@ CallBackClass::CallBackClass(int NoParameterHMP1,int NoOutputHMP1) {
 	sub_HMPOut	=nh.subscribe("HMPOutput",1, &CallBackClass::HMPOutputCallBack, this);
 	sub_HRecAction	=nh.subscribe("HRecAction",1, &CallBackClass::HRecActionCallBack, this);
 
-	sub_CtrlAck	=nh.subscribe("hri_control_ack",80, &CallBackClass::ControlAckCallBack, this);
+	sub_CtrlAck	=nh.subscribe("hri_robot_ack",80, &CallBackClass::ControlAckCallBack, this);
 	sub_CtrlOut	=nh.subscribe("controlOutput",1, &CallBackClass::ControlOutputCallBack, this);
 //	sub_JntSt	=nh.subscribe("robot/joint_states",1, &CallBackClass::RobotJointStatesCallBack, this);
 //	sub_LGrip	=nh.subscribe("robot/end_effector/left_gripper/state",1,&CallBackClass::RobotLeftGripperStatesCallBack, this);
