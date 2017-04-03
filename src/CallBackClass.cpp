@@ -111,32 +111,32 @@ void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
 	string hri_control_ack_msg;
 	hri_control_ack_msg=msg->data.c_str();
 
-	if(control_initial_command_flag==false) {
+//	if(control_initial_command_flag==false) {
 //		cout<< "---------->>>>Control Initial Flag is: "<<control_initial_command_flag<<endl;
 //		cout<< "---------->>>>Control Initial msg: "<<hri_control_ack_msg<<endl;
-		control_initial_command_flag=true;
+//		control_initial_command_flag=true;
 //		cout<< "---------->>>>I changed Control Initial Flag to: "<<control_initial_command_flag<<endl;
 
-	}
-	else {
+//	}
+//	else {
 //		cout<< "---------->>>>Control Ack Flag 0 is: "<<control_ack_flag[0]<<endl;
 //		cout<< "---------->>>>Control Ack Flag 1 is: "<<control_ack_flag[1]<<endl;
 		//hri_control_goal_flag=false;
 
-		if (hri_control_ack_msg=="hri_control_command_recieved_left"){// maybe can be commented!
-			hri_control_goal_flag[0]=false;
-			control_ack_flag[0]=true;
-//			cout<<"control_ack_flag[0]: "<<control_ack_flag[0]<<endl;
-//			cout<<"hri_control_goal_flag[0]: "<<hri_control_goal_flag[0]<<endl;
-//			cout<<"hri_control_goal_flag[1]: "<<hri_control_goal_flag[1]<<endl;
-
-		}
-		else if (hri_control_ack_msg=="hri_control_command_recieved_right"){// maybe can be commented!
-			hri_control_goal_flag[1]=false;
-			control_ack_flag[1]=true;
-
-		}
-		else if (hri_control_ack_msg=="GoalReachedLeft")
+//		if (hri_control_ack_msg=="hri_control_command_recieved_left"){// maybe can be commented!
+//			hri_control_goal_flag[0]=false;
+//			control_ack_flag[0]=true;
+////			cout<<"control_ack_flag[0]: "<<control_ack_flag[0]<<endl;
+////			cout<<"hri_control_goal_flag[0]: "<<hri_control_goal_flag[0]<<endl;
+////			cout<<"hri_control_goal_flag[1]: "<<hri_control_goal_flag[1]<<endl;
+//
+//		}
+//		else if (hri_control_ack_msg=="hri_control_command_recieved_right"){// maybe can be commented!
+//			hri_control_goal_flag[1]=false;
+//			control_ack_flag[1]=true;
+//
+//		}
+		if (hri_control_ack_msg=="GoalReachedLeft")
 		{
 			rob_goal_reach_flag[0]=false;
 			hri_control_goal_flag[0]=true;
@@ -146,10 +146,15 @@ void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
 			rob_goal_reach_flag[1]=false;
 			hri_control_goal_flag[1]=true;
 		}
-		else if (hri_control_ack_msg=="hri_control_command_Initialization"){// maybe can be commented!
+		else if (hri_control_ack_msg=="GoalReachedBiManual")
+		{
+			rob_goal_reach_flag[1]=false;
+			hri_control_goal_flag[1]=true;
+		}
+		else if (hri_control_ack_msg=="RobotTaskReached"){// maybe can be commented!
 			control_ack_flag[0]=true;
 		}
-	}
+//	}
 }
 
 void CallBackClass::ControlOutputCallBack(const std_msgs::String::ConstPtr& msg) {

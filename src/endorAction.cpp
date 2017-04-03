@@ -68,12 +68,13 @@ endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nod
 	node_level[8]=0;
 	node_level[9]=3;
 
-
-	node_action_list[0][0]="UnGraspRight";		node_action_list[0][1]="HandOverRightPoint6";	node_action_list[0][2]="HandOverLeftPoint7";		node_action_list[0][3]="UnGraspLeft";			node_action_list[0][4]="HandOver2InitialPos";		node_action_list[0][5]="0";						node_action_list[0][6]="0";					node_action_list[0][7]="0";						node_action_list[0][8]="0";
+//	node_action_list[0][0]="UnGraspRight";		node_action_list[0][1]="HandOverRightPoint6";	node_action_list[0][2]="HandOverLeftPoint7";		node_action_list[0][3]="UnGraspLeft";			node_action_list[0][4]="HandOver2InitialPos";		node_action_list[0][5]="0";						node_action_list[0][6]="0";					node_action_list[0][7]="0";						node_action_list[0][8]="0";
+	node_action_list[0][0]="UnGraspRight";		node_action_list[0][1]="HandOverRightPoint6";	node_action_list[0][2]="HandOverLeftPoint7";		node_action_list[0][3]="UnGraspLeft";			node_action_list[0][4]="0";							node_action_list[0][5]="0";						node_action_list[0][6]="0";					node_action_list[0][7]="0";						node_action_list[0][8]="0";
 	node_action_list[1][0]="PutDown";			node_action_list[1][1]="0";						node_action_list[1][2]="0";							node_action_list[1][3]="0";						node_action_list[1][4]="0";							node_action_list[1][5]="0";						node_action_list[1][6]="0";					node_action_list[1][7]="0";						node_action_list[1][8]="0";
 	node_action_list[2][0]="PickUp";			node_action_list[2][1]="Screwing";				node_action_list[2][2]="0";							node_action_list[2][3]="0";						node_action_list[2][4]="0";							node_action_list[2][5]="0";						node_action_list[2][6]="0";					node_action_list[2][7]="0";						node_action_list[2][8]="0";
 	node_action_list[3][0]="PickUp";			node_action_list[3][1]="PutDown";				node_action_list[3][2]="0"; 						node_action_list[3][3]="0";						node_action_list[3][4]="0";							node_action_list[3][5]="0";						node_action_list[3][6]="0";					node_action_list[3][7]="0";						node_action_list[3][8]="0";
-	node_action_list[4][0]="UnGrasp";			node_action_list[4][1]="HandOver2InitialPos";	node_action_list[4][2]="HandOverRightPoint1";		node_action_list[4][3]="HandOverRightPoint2";	node_action_list[4][4]="GraspRight"; 				node_action_list[4][5]="HandOverRightPoint3";	node_action_list[4][6]="HandOverPoint4";	node_action_list[4][7]="HandOverLeftPoint5"; 	node_action_list[4][8]="GraspLeft";
+//	node_action_list[4][0]="UnGrasp";			node_action_list[4][1]="HandOver2InitialPos";	node_action_list[4][2]="HandOverRightPoint1";		node_action_list[4][3]="HandOverRightPoint2";	node_action_list[4][4]="GraspRight"; 				node_action_list[4][5]="HandOverRightPoint3";	node_action_list[4][6]="HandOverPoint4";	node_action_list[4][7]="HandOverLeftPoint5"; 	node_action_list[4][8]="GraspLeft";
+	node_action_list[4][0]="UnGrasp";			node_action_list[4][1]="HandOverRightPoint1";	node_action_list[4][2]="HandOverRightPoint2";		node_action_list[4][3]="GraspRight"; 			node_action_list[4][4]="HandOverRightPoint3";		node_action_list[4][5]="HandOverPoint4";		node_action_list[4][6]="HandOverLeftPoint5";node_action_list[4][7]="GraspLeft";				node_action_list[4][8]="0";
 	node_action_list[5][0]="PickUp";			node_action_list[5][1]="ScrewingInitial";		node_action_list[5][2]="PutDown";					node_action_list[5][3]="0";						node_action_list[5][4]="0";							node_action_list[5][5]="0";						node_action_list[5][6]="0";					node_action_list[5][7]="0";						node_action_list[5][8]="0";
 	node_action_list[6][0]="0";					node_action_list[6][1]="0";						node_action_list[6][2]="0";							node_action_list[6][3]="0";						node_action_list[6][4]="0";							node_action_list[6][5]="0";						node_action_list[6][6]="0";					node_action_list[6][7]="0";						node_action_list[6][8]="0";
 	node_action_list[7][0]="HoldOn";			node_action_list[7][1]="0";						node_action_list[7][2]="0";							node_action_list[7][3]="0";						node_action_list[7][4]="0";							node_action_list[7][5]="0";						node_action_list[7][6]="0";					node_action_list[7][7]="0";						node_action_list[7][8]="0";
@@ -89,32 +90,58 @@ endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nod
 
 	//	action_list[:][2]: Left Arm (arm_index=0)  ; action_list[:][3]: Right Arm (arm_index=1)
 	// now H: just have first command because of one watch, later can increase.
+//	action_list[0][0]	="PickUp";						action_list[0][1]	="H";	action_list[0][2]	="PickUp";														action_list[0][3]	="0";
+//	action_list[1][0]	="Screwing";					action_list[1][1]	="H";	action_list[1][2]	="Screwing";													action_list[1][3]	="0";
+//	action_list[2][0]	="PutDown";						action_list[2][1]	="H";	action_list[2][2]	="PutDown";														action_list[2][3]	="0";
+//	action_list[3][0]	="GraspLeft";					action_list[3][1]	="R";	action_list[3][2]	="closeGrip left";												action_list[3][3]	="0";
+//	action_list[4][0]	="GraspRight";					action_list[4][1]	="R";	action_list[4][2]	="0";															action_list[4][3]	="closeGrip right";
+//	action_list[5][0]	="UnGraspLeft";					action_list[5][1]	="R";	action_list[5][2]	="openGrip left";												action_list[5][3]	="0";
+//	action_list[6][0]	="UnGraspRight";				action_list[6][1]	="R";	action_list[6][2]	="0";															action_list[6][3]	="openGrip right";
+//	action_list[7][0]	="HoldOnLeft";					action_list[7][1]	="R";	action_list[7][2]	="holdOn left";													action_list[7][3]	="0";
+//	action_list[8][0]	="HoldOnRight";					action_list[8][1]	="R";	action_list[8][2]	="0";															action_list[8][3]	="holdOn right";
+//	action_list[9][0]	="HoldOffLeft";					action_list[9][1]	="R";	action_list[9][2]	="stopArm left";												action_list[9][3]	="0";
+//	action_list[10][0]	="HoldOffRight";				action_list[10][1]	="R";	action_list[10][2]	="0";															action_list[10][3]	="stopArm right";
+//	action_list[11][0]	="HandOverRightPoint1";			action_list[11][1]	="R";	action_list[11][2]	="0";															action_list[11][3]	="jointPos right  0.756 -0.341 -0.280 0.753 0.251 1.163 0.686";
+//	action_list[12][0]	="HandOverRightPoint2";			action_list[12][1]	="R";	action_list[12][2]	="0";															action_list[12][3]	="jointPos right 0.620 -0.018 -0.069 0.267 0.115 1.328 0.749";
+//	action_list[13][0]	="HandOverRightPoint3";			action_list[13][1]	="R";	action_list[13][2]	="0";															action_list[13][3]	="jointPos right  0.725 -0.391 -0.280 0.753 0.251 1.163 0.686";
+//	action_list[14][0]	="HandOverPoint4";				action_list[14][1]	="R";	action_list[14][2]	="jointPos left -0.517 -0.137 -0.020 0.133 -1.414 1.672 -1.628";action_list[14][3]	="jointPos right +0.611 0 0 0 1.571 1.658 1.571";
+//	action_list[15][0]	="HandOverLeftPoint5";			action_list[15][1]	="R";	action_list[15][2]	="jointPos left -0.611 0 0 0.05 -1.571 1.658 -1.571";				action_list[15][3]	="0";
+//	action_list[16][0]	="HandOverRightPoint6";			action_list[16][1]	="R";	action_list[16][2]	="0";															action_list[16][3]	="jointPos right 0.419 -0.074 -0.016 0.080 1.521 1.649 1.477";
+//	action_list[17][0]	="PickUp_2_Plate_Init_Pos";		action_list[17][1]	="H";	action_list[17][2]	="PickUp Screw To plate Initial Position";						action_list[17][3]	="0";
+//	action_list[18][0]	="ScrewingInitial";				action_list[18][1]	="H";	action_list[18][2]	="ScrewingInitial";												action_list[18][3]	="0";
+//	action_list[19][0]	="PutDown_hand_2_Resting";		action_list[19][1]	="H";	action_list[19][2]	="Put Down Your Hand In Resting Position";						action_list[19][3]	="0";
+//	action_list[20][0]	="HandOver2InitialPos";			action_list[20][1]	="R";	action_list[20][2]	="jointPos left -0.084 -1.006 -1.188 1.947 0.668 1.028 -0.502";	action_list[20][3]	="jointPos right 0.093 -0.983 1.142 1.885 -0.591 1.042 0.53";
+//	action_list[21][0]	="HandOverLeftPoint7";			action_list[21][1]	="R";	action_list[21][2]	="jointPos left -0.706 0.360 0.054 0.166 -1.490 -0.225 -1.806";	action_list[21][3]	="0";
+//	action_list[22][0]	="Grasp";						action_list[22][1]	="R";	action_list[22][2]	="grasp 0"; 													action_list[22][3]	="grasp 1";
+//	action_list[23][0]	="UnGrasp";						action_list[23][1]	="R";	action_list[23][2]	="unGrasp 0"; 													action_list[23][3]	="unGrasp 1";
+//	action_list[24][0]	="HoldOn";						action_list[24][1]	="R";	action_list[24][2]	="holdOn 0";													action_list[24][3]	="holdOn 1";
+//	action_list[25][0]	="StopRobot";						action_list[25][1]	="R";	action_list[25][2]	="stop 0";														action_list[25][3]	="stop 1";
 	action_list[0][0]	="PickUp";						action_list[0][1]	="H";	action_list[0][2]	="PickUp";														action_list[0][3]	="0";
 	action_list[1][0]	="Screwing";					action_list[1][1]	="H";	action_list[1][2]	="Screwing";													action_list[1][3]	="0";
 	action_list[2][0]	="PutDown";						action_list[2][1]	="H";	action_list[2][2]	="PutDown";														action_list[2][3]	="0";
-	action_list[3][0]	="GraspLeft";					action_list[3][1]	="R";	action_list[3][2]	="closeGrip left";												action_list[3][3]	="0";
-	action_list[4][0]	="GraspRight";					action_list[4][1]	="R";	action_list[4][2]	="0";															action_list[4][3]	="closeGrip right";
-	action_list[5][0]	="UnGraspLeft";					action_list[5][1]	="R";	action_list[5][2]	="openGrip left";												action_list[5][3]	="0";
-	action_list[6][0]	="UnGraspRight";				action_list[6][1]	="R";	action_list[6][2]	="0";															action_list[6][3]	="openGrip right";
+	action_list[3][0]	="GraspLeft";					action_list[3][1]	="R";	action_list[3][2]	="grasp left";													action_list[3][3]	="0";
+	action_list[4][0]	="GraspRight";					action_list[4][1]	="R";	action_list[4][2]	="0";															action_list[4][3]	="grasp right";
+	action_list[5][0]	="UnGraspLeft";					action_list[5][1]	="R";	action_list[5][2]	="unGrasp left";												action_list[5][3]	="0";
+	action_list[6][0]	="UnGraspRight";				action_list[6][1]	="R";	action_list[6][2]	="0";															action_list[6][3]	="unGrasp right";
 	action_list[7][0]	="HoldOnLeft";					action_list[7][1]	="R";	action_list[7][2]	="holdOn left";													action_list[7][3]	="0";
 	action_list[8][0]	="HoldOnRight";					action_list[8][1]	="R";	action_list[8][2]	="0";															action_list[8][3]	="holdOn right";
-	action_list[9][0]	="HoldOffLeft";					action_list[9][1]	="R";	action_list[9][2]	="stopArm left";												action_list[9][3]	="0";
-	action_list[10][0]	="HoldOffRight";				action_list[10][1]	="R";	action_list[10][2]	="0";															action_list[10][3]	="stopArm right";
-	action_list[11][0]	="HandOverRightPoint1";			action_list[11][1]	="R";	action_list[11][2]	="0";															action_list[11][3]	="jointPos right  0.756 -0.341 -0.280 0.753 0.251 1.163 0.686";
-	action_list[12][0]	="HandOverRightPoint2";			action_list[12][1]	="R";	action_list[12][2]	="0";															action_list[12][3]	="jointPos right 0.620 -0.018 -0.069 0.267 0.115 1.328 0.749";
-	action_list[13][0]	="HandOverRightPoint3";			action_list[13][1]	="R";	action_list[13][2]	="0";															action_list[13][3]	="jointPos right  0.725 -0.391 -0.280 0.753 0.251 1.163 0.686";
-	action_list[14][0]	="HandOverPoint4";				action_list[14][1]	="R";	action_list[14][2]	="jointPos left -0.517 -0.137 -0.020 0.133 -1.414 1.672 -1.628";action_list[14][3]	="jointPos right +0.611 0 0 0 1.571 1.658 1.571";
-	action_list[15][0]	="HandOverLeftPoint5";			action_list[15][1]	="R";	action_list[15][2]	="jointPos left -0.611 0 0 0.05 -1.571 1.658 -1.571";				action_list[15][3]	="0";
-	action_list[16][0]	="HandOverRightPoint6";			action_list[16][1]	="R";	action_list[16][2]	="0";															action_list[16][3]	="jointPos right 0.419 -0.074 -0.016 0.080 1.521 1.649 1.477";
+	action_list[9][0]	="StopLeft";					action_list[9][1]	="R";	action_list[9][2]	="stop left";													action_list[9][3]	="0";
+	action_list[10][0]	="StopRight";					action_list[10][1]	="R";	action_list[10][2]	="0";															action_list[10][3]	="stop right";
+	action_list[11][0]	="HandOverRightPoint1";			action_list[11][1]	="R";	action_list[11][2]	="0";															action_list[11][3]	="pointReach right 0";
+	action_list[12][0]	="HandOverRightPoint2";			action_list[12][1]	="R";	action_list[12][2]	="0";															action_list[12][3]	="pointReach right 1";
+	action_list[13][0]	="HandOverRightPoint3";			action_list[13][1]	="R";	action_list[13][2]	="0";															action_list[13][3]	="pointReach right 2";
+	action_list[14][0]	="HandOverPoint4";				action_list[14][1]	="R";	action_list[14][2]	="pointReach left 3";											action_list[14][3]	="pointReach right 4";
+	action_list[15][0]	="HandOverLeftPoint5";			action_list[15][1]	="R";	action_list[15][2]	="pointReach left 5";											action_list[15][3]	="0";
+	action_list[16][0]	="HandOverRightPoint6";			action_list[16][1]	="R";	action_list[16][2]	="0";															action_list[16][3]	="pointReach right 6";
 	action_list[17][0]	="PickUp_2_Plate_Init_Pos";		action_list[17][1]	="H";	action_list[17][2]	="PickUp Screw To plate Initial Position";						action_list[17][3]	="0";
 	action_list[18][0]	="ScrewingInitial";				action_list[18][1]	="H";	action_list[18][2]	="ScrewingInitial";												action_list[18][3]	="0";
 	action_list[19][0]	="PutDown_hand_2_Resting";		action_list[19][1]	="H";	action_list[19][2]	="Put Down Your Hand In Resting Position";						action_list[19][3]	="0";
 	action_list[20][0]	="HandOver2InitialPos";			action_list[20][1]	="R";	action_list[20][2]	="jointPos left -0.084 -1.006 -1.188 1.947 0.668 1.028 -0.502";	action_list[20][3]	="jointPos right 0.093 -0.983 1.142 1.885 -0.591 1.042 0.53";
-	action_list[21][0]	="HandOverLeftPoint7";			action_list[21][1]	="R";	action_list[21][2]	="jointPos left -0.706 0.360 0.054 0.166 -1.490 -0.225 -1.806";	action_list[21][3]	="0";
-	action_list[22][0]	="Grasp";						action_list[22][1]	="R";	action_list[22][2]	="closeGrip left"; 												action_list[22][3]	="closeGrip right";
-	action_list[23][0]	="UnGrasp";						action_list[23][1]	="R";	action_list[23][2]	="openGrip left"; 												action_list[23][3]	="openGrip right";
-	action_list[24][0]	="HoldOn";						action_list[24][1]	="R";	action_list[24][2]	="holdMode left 1";												action_list[24][3]	="holdMode right 1";
-	action_list[25][0]	="HoldOff";						action_list[25][1]	="R";	action_list[25][2]	="stopArm left";												action_list[25][3]	="stopArm right";
+	action_list[21][0]	="HandOverLeftPoint7";			action_list[21][1]	="R";	action_list[21][2]	="pointReach left 7";											action_list[21][3]	="0";
+	action_list[22][0]	="Grasp";						action_list[22][1]	="R";	action_list[22][2]	="grasp left"; 													action_list[22][3]	="grasp right";
+	action_list[23][0]	="UnGrasp";						action_list[23][1]	="R";	action_list[23][2]	="unGrasp left"; 												action_list[23][3]	="unGrasp right";
+	action_list[24][0]	="HoldOn";						action_list[24][1]	="R";	action_list[24][2]	="holdOn left";													action_list[24][3]	="holdOn right";
+	action_list[25][0]	="StopRobot";						action_list[25][1]	="R";	action_list[25][2]	="stop left";												action_list[25][3]	="stop right";
 
 }
 void endorActionClass::nodeListFunction(void){

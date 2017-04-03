@@ -67,26 +67,26 @@ int main(int argc, char** argv) {
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
 
-	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_robot_command",1);
-	ros::Publisher pub_ctrl_error=nh.advertise<std_msgs::String>("hri_control_error_check",1);
+	ros::Publisher pub_ctrl_cmnd=nh.advertise<std_msgs::String>("hri_robot_command",80);
+	ros::Publisher pub_ctrl_error=nh.advertise<std_msgs::String>("hri_control_error_check",80);
 
 
 	// Arm left=0; Arm right=1;
-	const int NO_ARMS=2;
+	const int NO_ARMS_STATE=2;
 	const int NO_NODES=10;
 	const int NO_NODE_ACTION_WIDTH=9;
 	const int Number_of_Actions=26;
 
-	endorActionClass obj_nodeAction(NO_NODE_ACTION_WIDTH,NO_NODES,NO_ARMS,Number_of_Actions);
+	endorActionClass obj_nodeAction(NO_NODE_ACTION_WIDTH,NO_NODES,NO_ARMS_STATE,Number_of_Actions);
 
 	std_msgs::String msg_ctrl_err;
 	bool control_error_flag=true, control_error_stop_flag=true;
 
-	std_msgs::String msg_ctrl_cmnd[NO_ARMS] ;
-	bool control_command_flag[NO_ARMS];
-	int control_count[NO_ARMS], control_goal_count[NO_ARMS];
+	std_msgs::String msg_ctrl_cmnd[NO_ARMS_STATE] ;
+	bool control_command_flag[NO_ARMS_STATE];
+	int control_count[NO_ARMS_STATE], control_goal_count[NO_ARMS_STATE];
 
-	for (int i1=0;i1<NO_ARMS;i1++)
+	for (int i1=0;i1<NO_ARMS_STATE;i1++)
 	{
 		control_command_flag[i1]=true;
 		control_count[i1]=0;
@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
 	float paramCtrlInit [noParamCtrlInit];// Initial Parameters of Controller
 	float paramCtrl[noParamCtrl];// first input: set Data: 1, or get Data:0
 
-	int max_time_rob_reach_goal=15;//sec
+	int max_time_rob_reach_goal=20;//sec
 	int hri_ros_freq=80;//hz
 	ros::Rate loop_rate(hri_ros_freq);//Based on 2nd may discussion with Fulvio.
 	long int count=0;
@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
 	char HMP_init_param_change, ctrl_init_param_change;// check yes/no for changing initial questions of hmp/ctrl
 	int HMP_type_no,ctrl_type_no, ctrl_mode_no; // choosing type and mode of ctrl, hmp methods.
 
-	cout<<BOLD(FGRN("Default Control Type is 'PID' & Default Control Mode is 'Velocity'"
+	cout<<BOLD(FGRN("Default Control Type is 'Task Priority' & Default Control Mode is 'Velocity'"
 			" If it is OK Press <y>, Otherwise Press <n>: "));
 	cin>>ctrl_init_param_change;
 	// If CTRL initial question:yes -> initial ctrl flag to false.
@@ -242,7 +242,7 @@ int main(int argc, char** argv) {
 			else if (obj_nodeAction.responsible=="R")
 			{
 				obj_nodeAction.robStopFunction();
-				for (int i1=0;i1<NO_ARMS;i1++)
+				for (int i1=0;i1<NO_ARMS_STATE;i1++)
 				{
 					msg_ctrl_cmnd[i1].data=obj_nodeAction.actionCommand[i1];
 					obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
@@ -307,7 +307,7 @@ int main(int argc, char** argv) {
 					ms_robot_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 					Myfile1 <<ms_robot_start.count()<<" "<<"RobotStart"<<"\n";
 					cout<<">>>>> Robot: "<<obj_nodeAction.suggested_action<<endl;
-					for (int i1=0;i1<NO_ARMS;i1++)
+					for (int i1=0;i1<NO_ARMS_STATE;i1++)
 						if (obj_nodeAction.actionCommand[i1]!="0")
 						{
 							msg_ctrl_cmnd[i1].data=obj_nodeAction.actionCommand[i1];
@@ -424,17 +424,17 @@ int main(int argc, char** argv) {
 
 //***	Control		***//
 
-	// Control Initial Parameters
-		if (obj_callback.control_initial_command_flag==false) {
-			std_msgs::String msg_ctrlPar;
-			std::stringstream ss_ctrlPar;
-			for (int ii=1; ii<= noParamCtrlInit; ii++) {
-				ss_ctrlPar<<paramCtrlInit[ii-1];
-			}
-			msg_ctrlPar.data=ss_ctrlPar.str();
-			ROS_INFO("I publish Control Initial command: %s",msg_ctrlPar.data.c_str());
-			pub_ctrl_cmnd.publish(msg_ctrlPar);
-		}
+//	// Control Initial Parameters, maybe delete this part, maybe necessary later!
+//		if (obj_callback.control_initial_command_flag==false) {
+//			std_msgs::String msg_ctrlPar;
+//			std::stringstream ss_ctrlPar;
+//			for (int ii=1; ii<= noParamCtrlInit; ii++) {
+//				ss_ctrlPar<<paramCtrlInit[ii-1];
+//			}
+//			msg_ctrlPar.data=ss_ctrlPar.str();
+//			ROS_INFO("I publish Control Initial command: %s",msg_ctrlPar.data.c_str());
+//			pub_ctrl_cmnd.publish(msg_ctrlPar);
+//		}
 
 	//	Higher Level Control
 		// in this if condition when the robot reaches the goal we check for the next action to do.
@@ -451,14 +451,14 @@ int main(int argc, char** argv) {
 
 		///&& Human_Gesture_Flag==true
 		rob_goal_reach_flag_counter=0;
-		for (int i1=0;i1<NO_ARMS;i1++)
+		for (int i1=0;i1<NO_ARMS_STATE;i1++)
 			if (obj_callback.rob_goal_reach_flag[i1]==false )
 				rob_goal_reach_flag_counter++;
 //		when: "rob_goal_reach_flag_counter==NO_ARMS" it means that both arms reached their goal
-		if(rob_goal_reach_flag_counter==NO_ARMS && Gesture_Flag_Resolved==true)
+		if(rob_goal_reach_flag_counter==NO_ARMS_STATE && Gesture_Flag_Resolved==true)
 		{
 			obj_nodeAction.actionFlag=false;
-			for (int i1=0;i1<NO_ARMS;i1++)
+			for (int i1=0;i1<NO_ARMS_STATE;i1++)
 				obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
 			obj_nodeAction.node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]=1;
 
@@ -472,9 +472,9 @@ int main(int argc, char** argv) {
 //				cout<<endl;
 //				}
 		}
-		else if(rob_goal_reach_flag_counter==NO_ARMS && Gesture_Flag_Resolved==false)
+		else if(rob_goal_reach_flag_counter==NO_ARMS_STATE && Gesture_Flag_Resolved==false)
 		{
-			for (int i1=0;i1<NO_ARMS;i1++)
+			for (int i1=0;i1<NO_ARMS_STATE;i1++)
 				obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
 
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
@@ -494,25 +494,24 @@ int main(int argc, char** argv) {
 
 
 		// for initial control checking
-		if (count<= 1&& obj_callback.control_initial_command_flag==true)
-		{
-			control_command_flag[0]=false;
-			control_error_flag=false;
-
-			cout<<"control_command_flag[0]: "<<control_command_flag[0]<<endl;
-///	16 june		obj_callback.control_ack_flag=false;//??? change control->HMP, see what is happening??
-			///control_count=count;
-			for (int ii=1; ii<= noParamCtrl; ii++) {
-				 paramCtrl[ii-1]=0;
-				 ss_ctrl_cmnd<<paramCtrl[ii-1];
-			 }
-			msg_ctrl_cmnd[0].data=ss_ctrl_cmnd.str();
-			msg_ctrl_err.data=ss_ctrl_cmnd.str();
-		}
+//		if (count<= 1&& obj_callback.control_initial_command_flag==true){
+//			control_command_flag[0]=false;
+//			control_error_flag=false;
+//
+//			cout<<"control_command_flag[0]: "<<control_command_flag[0]<<endl;
+/////	16 june		obj_callback.control_ack_flag=false;//??? change control->HMP, see what is happening??
+//			///control_count=count;
+//			for (int ii=1; ii<= noParamCtrl; ii++) {
+//				 paramCtrl[ii-1]=0;
+//				 ss_ctrl_cmnd<<paramCtrl[ii-1];
+//			 }
+//			msg_ctrl_cmnd[0].data=ss_ctrl_cmnd.str();
+//			msg_ctrl_err.data=ss_ctrl_cmnd.str();
+//		}
 
 	// Flag check
 		// flag for checking if the controller reach the goal, wait for 10 sec(10sec*80 hz)
-		for (int i1=0;i1<NO_ARMS;i1++)
+		for (int i1=0;i1<NO_ARMS_STATE;i1++)
 		{
 			if (count>=control_goal_count[i1]+(max_time_rob_reach_goal*hri_ros_freq)
 					&& obj_callback.hri_control_goal_flag[i1]==false && obj_nodeAction.actionCommand[i1]!="0")
@@ -523,8 +522,8 @@ int main(int argc, char** argv) {
 				obj_callback.hri_control_goal_flag[i1]=true;// not sure check later
 			}
 				// check for receiving cmnd from hri -> controller:
-				if (count>=control_count[i1]+10 &&obj_callback.control_ack_flag[i1]==false)
-					control_command_flag[i1]=false;//*** make this flag false in real test
+//				if (count>=control_count[i1]+10 &&obj_callback.control_ack_flag[i1]==false)
+//					control_command_flag[i1]=false;//*** make this flag false in real test
 				///	cout<<"control_command_flag9: "<<control_command_flag<<endl;
 				/*		if (count>=control_goal_count+(max_time_rob_reach_goal*hri_ros_freq)
 											&& obj_callback.hri_control_goal_flag[1]==false && obj_nodeAction.actionCommand[1]!="0")
@@ -539,28 +538,26 @@ int main(int argc, char** argv) {
 
 
 	// Publish Control Message
-		if (count<=1)
-		{
-
-		}
-			for (int i1=0;i1<NO_ARMS;i1++)
-				if ( control_command_flag[i1]==false )
-				{
-
-					ROS_INFO("I publish Control Command: %s",msg_ctrl_cmnd[i1].data.c_str());
-					pub_ctrl_cmnd.publish(msg_ctrl_cmnd[i1]);
-					control_command_flag[i1]=true;
-					obj_callback.control_ack_flag[i1]=false;
-					control_count[i1]=count;
-					control_goal_count[i1]=count;
-				}
-
-			if ( control_error_flag==false )
-			{
-				//ROS_INFO("I publish Control error: %s",msg_ctrl_err.data.c_str());
-				pub_ctrl_error.publish(msg_ctrl_err);
-				control_error_flag=true;
+//		if (count<=1)
+//		{
+//
+//		}
+		for (int i1=0;i1<NO_ARMS_STATE;i1++)
+			if ( control_command_flag[i1]==false ){
+				ROS_INFO("publish hri robot Command: %s",msg_ctrl_cmnd[i1].data.c_str());
+				pub_ctrl_cmnd.publish(msg_ctrl_cmnd[i1]);
+				control_command_flag[i1]=true;
+				obj_callback.hri_control_goal_flag[i1]=false;
+				control_count[i1]=count;
+				control_goal_count[i1]=count;
 			}
+
+//			if ( control_error_flag==false )
+//			{
+//				//ROS_INFO("I publish Control error: %s",msg_ctrl_err.data.c_str());
+//				pub_ctrl_error.publish(msg_ctrl_err);
+//				control_error_flag=true;
+//			}
 		if (count==0){	usleep(0.5e6); }
 		loop_rate.sleep();
 		ros::spinOnce();
