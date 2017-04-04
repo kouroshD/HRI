@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
 	float paramCtrlInit [noParamCtrlInit];// Initial Parameters of Controller
 	float paramCtrl[noParamCtrl];// first input: set Data: 1, or get Data:0
 
-	int max_time_rob_reach_goal=20;//sec
+	int max_time_rob_reach_goal=30;//sec
 	int hri_ros_freq=80;//hz
 	ros::Rate loop_rate(hri_ros_freq);//Based on 2nd may discussion with Fulvio.
 	long int count=0;
