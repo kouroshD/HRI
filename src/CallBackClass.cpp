@@ -14,6 +14,7 @@ CallBackClass::CallBackClass(int NoParameterHMP1,int NoOutputHMP1) {
 	HMP_initial_command_flag	=true;
 	control_ack_flag[0]			=true;
 	control_ack_flag[1]			=true;
+	control_ack_flag[2]			=true;
 
 	rec_human_action_flag		=true;
 
@@ -21,13 +22,16 @@ CallBackClass::CallBackClass(int NoParameterHMP1,int NoOutputHMP1) {
 	HMP_parameter_cognition_flag=true;
 	hri_control_goal_flag[0]	=true;
 	hri_control_goal_flag[1]	=true;
+	hri_control_goal_flag[2]	=true;
 	rob_goal_reach_flag[0]		=true;
-	rob_goal_reach_flag[1]			=true;
+	rob_goal_reach_flag[1]		=true;
+	rob_goal_reach_flag[2]		=true;
+
 	sub_HMPAck	=nh.subscribe("HMPAck",80, &CallBackClass::HMPAckCallBack, this);
 	sub_HMPOut	=nh.subscribe("HMPOutput",1, &CallBackClass::HMPOutputCallBack, this);
 	sub_HRecAction	=nh.subscribe("HRecAction",1, &CallBackClass::HRecActionCallBack, this);
 
-	sub_CtrlAck	=nh.subscribe("hri_robot_ack",80, &CallBackClass::ControlAckCallBack, this);
+	sub_CtrlAck	=nh.subscribe("hri_robot_ack",80, &CallBackClass::RobotAckCallBack, this);
 	sub_CtrlOut	=nh.subscribe("controlOutput",1, &CallBackClass::ControlOutputCallBack, this);
 //	sub_JntSt	=nh.subscribe("robot/joint_states",1, &CallBackClass::RobotJointStatesCallBack, this);
 //	sub_LGrip	=nh.subscribe("robot/end_effector/left_gripper/state",1,&CallBackClass::RobotLeftGripperStatesCallBack, this);
@@ -106,7 +110,7 @@ void CallBackClass::HRecActionCallBack(const std_msgs::String::ConstPtr& msg) {
 	rec_human_action_flag=false;
 }
 // Control
-void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
+void CallBackClass::RobotAckCallBack(const std_msgs::String::ConstPtr& msg) {
 	ROS_INFO("I heard Control Ack: [%s]", msg->data.c_str());
 	string hri_control_ack_msg;
 	hri_control_ack_msg=msg->data.c_str();
@@ -148,8 +152,8 @@ void CallBackClass::ControlAckCallBack(const std_msgs::String::ConstPtr& msg) {
 		}
 		else if (hri_control_ack_msg=="GoalReachedBiManual")
 		{
-			rob_goal_reach_flag[1]=false;
-			hri_control_goal_flag[1]=true;
+			rob_goal_reach_flag[2]=false;
+			hri_control_goal_flag[2]=true;
 		}
 		else if (hri_control_ack_msg=="RobotTaskReached"){// maybe can be commented!
 			control_ack_flag[0]=true;

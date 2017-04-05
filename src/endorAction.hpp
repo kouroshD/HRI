@@ -35,7 +35,7 @@ class endorActionClass {
 		const int nodeActionList_width;
 		const int Number_of_Nodes;
 		const int Number_of_Actions;
-		const int Number_of_Arms;
+		const int Number_of_Arms_State;
 
 		string suggested_Node;// the node is suggested should be done by human
 		//string sug_Node_Human;// the node is suggested should be done by Robot

@@ -72,10 +72,10 @@ int main(int argc, char** argv) {
 
 
 	// Arm left=0; Arm right=1;
-	const int NO_ARMS_STATE=2;
+	const int NO_ARMS_STATE=3;
 	const int NO_NODES=10;
 	const int NO_NODE_ACTION_WIDTH=9;
-	const int Number_of_Actions=26;
+	const int Number_of_Actions=28;
 
 	endorActionClass obj_nodeAction(NO_NODE_ACTION_WIDTH,NO_NODES,NO_ARMS_STATE,Number_of_Actions);
 

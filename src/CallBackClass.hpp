@@ -22,12 +22,12 @@ class CallBackClass {
 		bool HMP_ack_flag;
 		bool HMP_cognition_flag;
 		bool HMP_initial_command_flag;
-		bool control_ack_flag[2];		// when we publish a control cmnd msg until receive a response this will be false.
+		bool control_ack_flag[3];		// when we publish a control cmnd msg until receive a response this will be false.
 		bool control_initial_command_flag;
 		bool HMP_parameter_cognition_flag;
-		bool hri_control_goal_flag [2];// 2 arms, flag is false when correct goal is received by controller and the robot is not recieved the goal
-		bool rob_goal_reach_flag[2];//2 arms, flag is false when robot reaches goal, otherwise is true, then we check for the next action in endor-action
-		bool rob_stop_reach_flag[2];
+		bool hri_control_goal_flag [3];// 2 arms, flag is false when correct goal is received by controller and the robot is not recieved the goal
+		bool rob_goal_reach_flag[3];//2 arms, flag is false when robot reaches goal, otherwise is true, then we check for the next action in endor-action
+//		bool rob_stop_reach_flag[3];
 		bool rec_human_action_flag;
 		string recognized_action_human;
 		int NoParameterHMP;
@@ -43,7 +43,7 @@ class CallBackClass {
 		void HRecActionCallBack(const std_msgs::String::ConstPtr& msg3);
 
 
-		void ControlAckCallBack(const std_msgs::String::ConstPtr& msg1);
+		void RobotAckCallBack(const std_msgs::String::ConstPtr& msg1);
 		void ControlOutputCallBack(const std_msgs::String::ConstPtr& msg2);
 /*
 		void RobotJointStatesCallBack(sensor_msgs::JointState stateMsg);
