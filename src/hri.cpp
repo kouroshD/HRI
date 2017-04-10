@@ -310,6 +310,7 @@ int main(int argc, char** argv) {
 					for (int i1=0;i1<NO_ARMS_STATE;i1++)
 						if (obj_nodeAction.actionCommand[i1]!="0")
 						{
+							cout<<"000:obj_nodeAction.actionCommand[i1] "<<obj_nodeAction.actionCommand[i1]<<endl;
 							msg_ctrl_cmnd[i1].data=obj_nodeAction.actionCommand[i1];
 							control_command_flag[i1]=false;
 

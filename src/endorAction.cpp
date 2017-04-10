@@ -7,7 +7,7 @@
  */
 #include "endorAction.hpp"
 
-endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nodes1=10,int Number_of_Arms1=2,int Number_of_Actions1=26):nodeActionList_width(nodeActionList_width1),Number_of_Nodes(Number_of_Nodes1),Number_of_Arms_State(Number_of_Arms1),Number_of_Actions(Number_of_Actions1){
+endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nodes1=10,int Number_of_Arms1=3,int Number_of_Actions1=26):nodeActionList_width(nodeActionList_width1),Number_of_Nodes(Number_of_Nodes1),Number_of_Arms_State(Number_of_Arms1),Number_of_Actions(Number_of_Actions1){
 
 	actionCommand=new string [Number_of_Arms_State];
 	node_level=new int [Number_of_Nodes];
@@ -143,7 +143,7 @@ endorActionClass::endorActionClass(int nodeActionList_width1=9,int Number_of_Nod
 	action_list[24][0]	="HoldOn";						action_list[24][1]	="R";	action_list[24][2]	="holdOn left";								action_list[24][3]	="holdOn right"; 				action_list[24][4]	="0";
 	action_list[25][0]	="StopRobot";					action_list[25][1]	="R";	action_list[25][2]	="stop left";								action_list[25][3]	="stop right"; 					action_list[25][4]	="0";
 	action_list[26][0]	="ObstacleAvoidanceTask";		action_list[26][1]	="R";	action_list[26][2]	="0";										action_list[26][3]	="0"; 							action_list[26][4]	="obstacleAvoidanceTask biMan";
-	action_list[27][0]	="BimanKeepPlate";				action_list[27][1]	="R";	action_list[26][2]	="0";										action_list[27][3]	="0"; 							action_list[27][4]	="pointReach biMan 11";
+	action_list[27][0]	="BimanKeepPlate";				action_list[27][1]	="R";	action_list[27][2]	="0";										action_list[27][3]	="0"; 							action_list[27][4]	="pointReach biMan 11";
 
 //	obstacleAvoidanceTask
 }
