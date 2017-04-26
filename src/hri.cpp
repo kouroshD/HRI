@@ -54,15 +54,15 @@ int main(int argc, char** argv) {
 	//ms_human_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 	//cout<<ms_human_start.count()<<endl<<ms_human_stop.count()<<endl;
 	cout<<"*********************************************************"<<endl;
-	cout<<"******************** Test 70 (Path:1) ********************"<<endl;
+	cout<<"******************** Test 72 (Path:1) ********************"<<endl;
 	cout<<"*********************************************************"<<endl;
 
 	ofstream Myfile1,Myfile2;
 	const char* DataLogPath	="/home/nasa/Datalog/ICRA_TESTS";
 	string DataLogPath2		="/home/nasa/Datalog/ICRA_TESTS";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/70_Assembly_Timing.txt").c_str(),ios::app);
-	Myfile2.open ((DataLogPath2+"/70_Gesture_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/72_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile2.open ((DataLogPath2+"/72_Gesture_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
