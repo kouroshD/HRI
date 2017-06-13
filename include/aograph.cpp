@@ -530,7 +530,7 @@ string AOgraph::loadFromFile(string fileName)
         cout<<"[ERROR] The graph is not empty."
             <<"Do you really want to overwrite the current graph?" <<endl;
 
-    }            
+    }
     
     ifstream graphFile(fileName.c_str());
 	cout <<"Loading graph description from file: " <<fileName <<endl;

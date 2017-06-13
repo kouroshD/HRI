@@ -15,6 +15,7 @@
 #include <sstream>
 #include "aograph.h"
 #include "aonode.h"
+#include <boost/algorithm/string.hpp>
 
 #define RST  "\x1B[0m"
 #define KBLU  "\x1B[34m"
@@ -33,8 +34,8 @@ class endorActionClass {
 	public:
 //variables:
 		const int nodeActionList_width;
-		const int Number_of_Nodes;
-		const int Number_of_Actions;
+		int Number_of_Nodes;
+		int Number_of_Actions;
 		const int Number_of_Arms_State;
 
 		string suggested_Node;// the node is suggested should be done by human
@@ -44,11 +45,14 @@ class endorActionClass {
 
 		string	**node_action_list;
 		int		**node_action_flag; // if the action is in a node and (solved:1), (Not Solved: 0), (pending:-1)
-		string	**action_list;
-		string 	**node_list;
-		int 	*node_level; // this should be integer to check which has higher priority.
+//		string	**Action_DEF_list;
+//		string 	**node_list;
+//		int 	*node_level; // this should be integer to check which has higher priority.
 		string *actionCommand;// size: no of arms
-
+	    std::vector<std::vector<std::string>> Node_action_list;
+	    std::vector<std::vector<std::string>> Action_DEF_list;
+	    std::vector<std::vector<int>> Node_action_flag;
+	    std::vector<int> Number_of_Action_For_Each_Node;
 
 	/*	string	**node_action_list;
 		string	**action_list;
@@ -69,7 +73,7 @@ class endorActionClass {
 		int ambiguity_Number;
 		//class functions:
 
-		endorActionClass(int,int,int,int);						//constructor
+		endorActionClass(int,int, string action_definition_path, string hyperArc_action_path);						//constructor
 		void nodeActionListFunction (void);				//the list actions should be done by each node
 		void ActionListFunction(void);					// each action should do what and who should do that.
 		void nodeListFunction(void);
@@ -80,8 +84,33 @@ class endorActionClass {
 		//AOgraph mygraph_EA;
 
 	private:
-		int cc;
+
 		int suggested_node_number, suggested_action_number;
+
+};
+
+void Read_2D_TXT_FILE(string file_path,string delim_type,std::vector<std::vector<std::string>> & Result){
+	cout<<"=============="<<file_path<<"=============="<<endl;
+    ifstream file_path_ifStr(file_path.c_str());
+    std::vector<std::string> line_list;
+    string line;
+//    int line_counter=0;
+    if (file_path_ifStr.is_open()){
+    	while(getline(file_path_ifStr,line)){
+//    		line_counter++;
+//    		cout<<"Line "<<line_counter<<": "<<line<<endl;
+    		boost::split(line_list, line, boost::is_any_of(delim_type));
+    		Result.push_back(line_list);
+    	}
+    	file_path_ifStr.close();
+    }
+//    cout<<"-------------"<<endl;
+
+    for (int m=0;m<Result.size();m++){
+    	for (int n=0;n<Result[m].size();n++)
+    	cout<<Result[m][n]<<" ";
+    	cout<<endl;
+    }
 
 };
 

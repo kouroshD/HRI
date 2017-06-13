@@ -24,6 +24,7 @@
 #include "aograph.h"
 #include "CallBackClass.hpp"
 #include "endorAction.hpp"
+#include <boost/algorithm/string.hpp>
 
 // cout colors and options:
 #define RST  "\x1B[0m"
@@ -37,6 +38,30 @@
 using namespace std;
 using namespace std::chrono;
 
+//void Read_2D_TXT_FILE(string file_path,string delim_type,std::vector<std::vector<std::string>> & Result){
+//	cout<<"=============="<<file_path<<"=============="<<endl;
+//    ifstream file_path_ifStr(file_path.c_str());
+//    std::vector<std::string> line_list;
+//    string line;
+////    int line_counter=0;
+//    if (file_path_ifStr.is_open()){
+//    	while(getline(file_path_ifStr,line)){
+////    		line_counter++;
+////    		cout<<"Line "<<line_counter<<": "<<line<<endl;
+//    		boost::split(line_list, line, boost::is_any_of(delim_type));
+//    		Result.push_back(line_list);
+//    	}
+//    	file_path_ifStr.close();
+//    }
+////    cout<<"-------------"<<endl;
+//
+//    for (int m=0;m<Result.size();m++){
+//    	for (int n=0;n<Result[m].size();n++)
+//    	cout<<Result[m][n]<<" ";
+//    	cout<<endl;
+//    }
+//
+//};
 
 
 int main(int argc, char** argv) {
@@ -48,6 +73,17 @@ int main(int argc, char** argv) {
 	*/
 
 	microseconds ms_Gesture_time,ms_planning_start,ms_planning_stop, ms_robot_start, ms_robot_stop, ms_human_start, ms_human_stop, ms_assembly_start, ms_assembly_stop;
+
+	const char* home=getenv("HOME");
+	string path(home);
+    path += "/HRI/";
+    string hyperArc_action_path=path+"Node_Action_List.txt";
+    string action_definition_path=path+"Action_Def_List.txt";
+//    string delim_type=" ";
+//    std::vector<std::vector<std::string>> HA_action_list;
+//    std::vector<std::vector<std::string>> action_DEF_list;
+//    Read_2D_TXT_FILE(hyperArc_action_path,delim_type,HA_action_list);
+//    Read_2D_TXT_FILE(action_definition_path,delim_type,action_DEF_list);
 
 	//ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 	//system("canberra-gtk-play -f /home/nasa/Downloads/PickUp.wav");
@@ -61,8 +97,8 @@ int main(int argc, char** argv) {
 	const char* DataLogPath	="/home/nasa/Datalog/ICRA_TESTS";
 	string DataLogPath2		="/home/nasa/Datalog/ICRA_TESTS";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/72_Assembly_Timing.txt").c_str(),ios::app);
-	Myfile2.open ((DataLogPath2+"/72_Gesture_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/73_Assembly_Timing.txt").c_str(),ios::app);
+	Myfile2.open ((DataLogPath2+"/73_Gesture_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
@@ -77,7 +113,7 @@ int main(int argc, char** argv) {
 	const int NO_NODE_ACTION_WIDTH=9;
 	const int Number_of_Actions=28;
 
-	endorActionClass obj_nodeAction(NO_NODE_ACTION_WIDTH,NO_NODES,NO_ARMS_STATE,Number_of_Actions);
+	endorActionClass obj_nodeAction(NO_NODE_ACTION_WIDTH,NO_ARMS_STATE, action_definition_path, hyperArc_action_path);
 
 	std_msgs::String msg_ctrl_err;
 	bool control_error_flag=true, control_error_stop_flag=true;
@@ -215,7 +251,7 @@ int main(int argc, char** argv) {
 
 		if (Human_Gesture_Flag==false)
 		{
-			// ? should ask this part, is it a part of planning really! i don't think so, human is deciding here???
+
 			ms_planning_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 			Myfile1 <<ms_planning_start.count()<<" "<<"planningStart"<<"\n";
 
@@ -287,8 +323,8 @@ int main(int argc, char** argv) {
 				if (obj_nodeAction.responsible=="H")
 				{
 					cout<<FBLU(">>>>>> Human: ")<<obj_nodeAction.actionCommand[0]<<endl;
-					if (obj_nodeAction.actionCommand[0]=="pickUp")
-						system("canberra-gtk-play -f /home/nasa/Downloads/PickUp.wav");
+//					if (obj_nodeAction.actionCommand[0]=="pickUp")
+//						system("canberra-gtk-play -f /home/nasa/Downloads/PickUp.wav");
 
 					ms_human_start= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 					Myfile1 <<ms_human_start.count()<<" "<<"HumanStart"<<"\n";
