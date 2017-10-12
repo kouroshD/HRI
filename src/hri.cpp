@@ -260,7 +260,7 @@ int main(int argc, char** argv) {
 			ms_planning_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 			Myfile1 <<ms_planning_stop.count()<<" "<<"planningStop"<<"\n";
 
-			if (obj_nodeAction.node_action_flag[1][0]==1 && control_error_stop_flag==false)
+			if (obj_nodeAction.Node_action_flag[1][0]==1 && control_error_stop_flag==false)
 			{
 				msg_ctrl_err.data="StopControlErrorCheck";
 				control_error_flag=false;
@@ -280,12 +280,17 @@ int main(int argc, char** argv) {
 				obj_nodeAction.robStopFunction();
 				for (int i1=0;i1<NO_ARMS_STATE;i1++)
 				{
-					msg_ctrl_cmnd[i1].data=obj_nodeAction.actionCommand[i1];
-					obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
-					obj_callback.hri_control_goal_flag[i1]=true;/// ??? check to be sure
-					control_command_flag[i1]=false;
+					if (obj_nodeAction.actionCommand[i1]!="0")
+					{
+						msg_ctrl_cmnd[i1].data=obj_nodeAction.actionCommand[i1];
+						obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
+						obj_callback.hri_control_goal_flag[i1]=true;/// ??? check to be sure
+						control_command_flag[i1]=false;
+					}
+					else if (obj_nodeAction.actionCommand[i1]=="0")
+						obj_callback.rob_goal_reach_flag[i1]=false;
 				}
-					///cout<<"control_command_flag[0]: "<<control_command_flag[0]<<endl;
+				///cout<<"control_command_flag[0]: "<<control_command_flag[0]<<endl;
 					///cout<<"control_command_flag[1]: "<<control_command_flag[1]<<endl;
 					///obj_nodeAction.actionFlag=true;
 					cout<<"POINT 10"<<endl;
@@ -497,7 +502,11 @@ int main(int argc, char** argv) {
 			obj_nodeAction.actionFlag=false;
 			for (int i1=0;i1<NO_ARMS_STATE;i1++)
 				obj_callback.rob_goal_reach_flag[i1]=true; /// ??? check to be sure
-			obj_nodeAction.node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]=1;
+			obj_nodeAction.Node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]=1;
+			cout<<"obj_nodeAction.actionNumber: "<<obj_nodeAction.actionNumber<<endl;
+			cout<<"obj_nodeAction.node_number: "<<obj_nodeAction.node_number<<endl;
+			cout<<"obj_nodeAction.node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]: "<<obj_nodeAction.Node_action_flag[obj_nodeAction.node_number][obj_nodeAction.actionNumber]<<endl;
+
 
 			ms_robot_stop= duration_cast< microseconds >(system_clock::now().time_since_epoch());
 			Myfile1 <<ms_robot_stop.count()<<" "<<"RobotStop"<<"\n";

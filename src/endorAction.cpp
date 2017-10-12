@@ -213,21 +213,47 @@ void endorActionClass::nodeActionListFunction(void){
 	if (actionFlag==false)
 	{
 		actionNumber=actionNumber+1;
-		suggested_action=Node_action_list[node_number][actionNumber+2];
+		cout<<"nodeActionListFunction: "<< Node_action_list[node_number][0]<<endl;
+		cout<<"nodeActionListFunction: "<< actionNumber+2<< " "<< Node_action_list[node_number].size()<<endl;
+		for (int kk=0;kk<(int)Node_action_list[node_number].size();kk++)
+			cout<< Node_action_list[node_number][kk]<<" ";
+		cout<<endl;
 
-		if (actionNumber>0 && Node_action_flag[node_number][actionNumber-1]==0)
-			cout<<FRED("Previous action in this node is not solved")<<endl;
-		///		actionFlag=true;
-		// when we reach "0" actions, it means we reach the requested node.
-		///DEL
-		if (suggested_action=="0")
+		if (actionNumber+2>(int)Node_action_list[node_number].size()-1) // bring it before, check for the size
 		{
 			solved_Node=Node_action_list[node_number][0];
 			if (solved_Node=="plate_screw_screwPos1" || solved_Node=="plate_screw_screwPos2")
 				solved_Node="plate_screw_screwPos";
 
 			//cout<<"***************** solved_Node2: "<<solved_Node<<endl;
-///			actionFlag=true;
+			///			actionFlag=true;
+			nodeFlag=false;
+			actionNumber=-1;
+		}
+		else{
+			suggested_action=Node_action_list[node_number][actionNumber+2];
+
+			if (actionNumber>0 && Node_action_flag[node_number][actionNumber-1]==0){
+				cout<<FRED("Previous action in this node is not solved")<<endl;
+				cout<<"node_number: "<<node_number<<endl;
+				cout<<"actionNumber-1: "<<actionNumber-1<<endl;
+				cout<<"Node_action_flag[node_number][actionNumber-1]: "<<Node_action_flag[node_number][actionNumber-1]<<endl;
+
+
+			}
+		}
+
+		///		actionFlag=true;
+		// when we reach "0" actions, it means we reach the requested node.
+		///DEL
+		if (suggested_action=="0") // bring it before, check for the size
+		{
+			solved_Node=Node_action_list[node_number][0];
+			if (solved_Node=="plate_screw_screwPos1" || solved_Node=="plate_screw_screwPos2")
+				solved_Node="plate_screw_screwPos";
+
+			//cout<<"***************** solved_Node2: "<<solved_Node<<endl;
+			///			actionFlag=true;
 			nodeFlag=false;
 			actionNumber=-1;
 		}
