@@ -94,11 +94,11 @@ int main(int argc, char** argv) {
 	cout<<"*********************************************************"<<endl;
 
 	ofstream Myfile1,Myfile2;
-	const char* DataLogPath	="/home/nasa/Datalog/ICRA_TESTS";
-	string DataLogPath2		="/home/nasa/Datalog/ICRA_TESTS";
+	const char* DataLogPath	="/home/nasa/Datalog/Mechatronics/user1/1";
+	string DataLogPath2		="/home/nasa/Datalog/Mechatronics/user1/1";
 	mkdir(DataLogPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	Myfile1.open ((DataLogPath2+"/73_Assembly_Timing.txt").c_str(),ios::app);
-	Myfile2.open ((DataLogPath2+"/73_Gesture_Timing.txt").c_str(),ios::app);
+	Myfile1.open ((DataLogPath2+"/Assembly_Timing.txt").c_str(),ios::app);
+	Myfile2.open ((DataLogPath2+"/Gesture_Timing.txt").c_str(),ios::app);
 
 	ros::init(argc, argv, "hri");
 	ros::NodeHandle nh;
